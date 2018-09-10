@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Mac系统Idea常用快捷键]]></title>
+    <url>%2F2018%2F09%2F09%2FMac%E7%B3%BB%E7%BB%9F%E4%B8%8BIdea%E5%BF%AB%E6%8D%B7%E9%94%AE%2F</url>
+    <content type="text"><![CDATA[之前一直使用的Java编译工具是eclipse,进新公司之后,公司配了一台Mac并且后端都用IntelliJ IDEA开发,不能脱离团队呀,果断入手了IDEA,不得不说比eclipse更加的智能好用,为了提高开发效率，所以决定整理一下IDEA的常用快捷键,不想每次都配,所以就决定用IDEA默认的快捷键,用的是Mac OS X 10.5+ 但是Mac系统中与IDEA的快捷键有些冲突,可以把Mac相关冲突的快捷键更改或取消掉.下面整理了平常开发中常用的快捷键，以便于更好的记忆和熟练使用. Mac键盘符号和修饰健说明⌘ Command⇧ Shift⌥ Option⌃ Control↩︎ Return/Enter⌫ Delete⌦ 向前删除键（Fn+Delete）↑ 上箭头↓ 下箭头← 左箭头→ 右箭头⇞ Page Up（Fn+↑）⇟ Page Down（Fn+↓）Home Fn + ←End Fn + →⇥ 右制表符（Tab键）⇤ 左制表符（Shift+Tab）⎋ Escape (Esc) Editing编辑123456789101112131415161718192021222324252627282930Control+Space 基本的代码补全(补全任何类,方法,变量) 注意这里与Mac系统的输入法快捷键冲突Control+Shift+Space 智能代码补全 (过滤器方法列表和变量的预期类型）Command+Shift+Enter 自动结束代码,行末添加分号Command+P 显示方法的参数Control+J 快速显示文档Command+鼠标放在代码上 显示代码简要信息Command+N 生成代码（getter、setter、构造函数、hashCode/equals,toString,实现接口方法）这个还有其他快捷键我只记这一种了Control+O 覆盖方法(重写父类方法)Control+I 实现接口方法(我直接记Command+N,也能实现接口方法)Command+Option+T 包围代码(try catch,if else,do while等)Command+/ 行注释代码(再按一次就是取消注释)Command+Option+/ 块注释Option+方向上 连续选中代码块Option+方向下 减少选中的代码块Control+Shift+Q 显示上下文信息Option+Enter 显示意向动作和快速修复代码Command+Option+L 格式化代码Control+Option+O 优化importTab 缩进代码Command+C 复制Command+V 粘贴Command+X 剪切Command+D 复制当前行或选定的块Command+Delete 删除当前行或选定的行的块Control+Shift+J 智能的将代码拼接成一行Command+Enter 智能的拆分拼接的行Command+加号/减号 展开/折叠代码块Command+Shift+加号/减号 展开/折叠所有代码块Command+W 关闭活动的编辑器选项Command+Shift+上下 上下移动代码 Search/Replace（查询/替换)1234Command+F 文件内查找Command+Shift+F 全局查找Command+G 查找模式下向下查找Command+Shift+G 查找模式下向上查找 Usage Search（使用查询）1234Option+F7 在文件中查找用到的地方Command+F7 在类中查找用到的地方Command+Shift+F7 在类中显示(颜色标记)用到的地方Command+Option+F7 显示用法 Compile and Run（编译和运行）12345Command+F9 编译ProjectCommand+Shift+F9 编译选择的文件,包或模块Control+Option+R 弹出Run的可选菜单Control+Option+R 弹出Debug的可选菜单Control+D 调试 Debug调试123456F8 进入下一步,不进入当前方法内F7 进入下一步,如果当前断点式方法,则进入方法内Shift+F8 跳出Option+F9 运行到光标停留处F9 放开debug Command+Shift+F8 查看断点信息 Navigation（导航）123456Shift+Shift 查找文件Command+L 跳转行Command+E 显示最近打开的文件记录列表Command+Option+方向键左/右 退回/前进到上一个操作的地方Command+B 或Command+鼠标左键 进入方法或变量的接口或是定义处Command+Option+B 越过接口,直接跳掉实现处 Refactoring（重构）1234F5 复制文件到指定目录Command+delete 在文件上安全删除文件,弹出确认框Shift+F6 重命名文件Command+Option+M 将选中的代码提取为方法 General（通用）1Command+, 打开idea系统设置]]></content>
+      <categories>
+        <category>开发</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[brave heart]]></title>
     <url>%2F2018%2F08%2F18%2F%E6%88%91%E5%B0%B1%E6%98%AF%E5%86%99%E7%9D%80%E7%8E%A9%E7%8E%A9%E7%9A%84%2F</url>
     <content type="text"><![CDATA[不论是谁 都有想去逃避的时候只要在那一刻发挥出潜藏的那种力量 便可以清除前路上的障碍让这个蓝色星球 继续闪耀着光芒这一定是只有你才能做到的事情 紧紧抓住 你所拥有的梦想守护着 你重要的朋友使自己变得更坚强潜在的未知力量 像火焰那般被点燃你的所有愿望 绝非南柯一梦都一定可以实现天空绝不会天天放晴 所以当寒冷的雨滴下落时 便撑起雨伞吧生活是没有地图可以指引的 所以我们是自由的随心所欲 即管前往任何地方所以冲刺吧!! 用比风还要快的速度]]></content>
@@ -10,13 +18,5 @@
       <tags>
         <tag>song</tag>
       </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2017%2F10%2F28%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
-      <categories>
-        <category>测试</category>
-      </categories>
   </entry>
 </search>

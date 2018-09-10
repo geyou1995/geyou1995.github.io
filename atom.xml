@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-08-23T13:33:52.224Z</updated>
+  <updated>2018-09-09T02:24:13.972Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,34 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Mac系统Idea常用快捷键</title>
+    <link href="http://yoursite.com/2018/09/09/Mac%E7%B3%BB%E7%BB%9F%E4%B8%8BIdea%E5%BF%AB%E6%8D%B7%E9%94%AE/"/>
+    <id>http://yoursite.com/2018/09/09/Mac系统下Idea快捷键/</id>
+    <published>2018-09-09T02:24:45.000Z</published>
+    <updated>2018-09-09T02:24:13.972Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>之前一直使用的Java编译工具是eclipse,进新公司之后,公司配了一台Mac并且后端都用IntelliJ IDEA开发,不能脱离团队呀,果断入手了IDEA,不得不说比eclipse更加的智能好用,为了提高开发效率，所以决定整理一下IDEA的常用快捷键,不想每次都配,所以就决定用IDEA默认的快捷键,用的是Mac OS X 10.5+ 但是Mac系统中与IDEA的快捷键有些冲突,可以把Mac相关冲突的快捷键更改或取消掉.下面整理了平常开发中常用的快捷键，以便于更好的记忆和熟练使用.</p><h2 id="Mac键盘符号和修饰健说明"><a href="#Mac键盘符号和修饰健说明" class="headerlink" title="Mac键盘符号和修饰健说明"></a>Mac键盘符号和修饰健说明</h2><p>⌘ Command<br>⇧ Shift<br>⌥ Option<br>⌃ Control<br>↩︎ Return/Enter<br>⌫ Delete<br>⌦ 向前删除键（Fn+Delete）<br>↑ 上箭头<br>↓ 下箭头<br>← 左箭头<br>→ 右箭头<br>⇞ Page Up（Fn+↑）<br>⇟ Page Down（Fn+↓）<br>Home Fn + ←<br>End Fn + →<br>⇥ 右制表符（Tab键）<br>⇤ 左制表符（Shift+Tab）<br>⎋ Escape (Esc)</p><h2 id="Editing编辑"><a href="#Editing编辑" class="headerlink" title="Editing编辑"></a>Editing编辑</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Control+Space 基本的代码补全(补全任何类,方法,变量) 注意这里与Mac系统的输入法快捷键冲突</span><br><span class="line">Control+Shift+Space 智能代码补全 (过滤器方法列表和变量的预期类型）</span><br><span class="line">Command+Shift+Enter 自动结束代码,行末添加分号</span><br><span class="line">Command+P  显示方法的参数</span><br><span class="line">Control+J  快速显示文档</span><br><span class="line">Command+鼠标放在代码上  显示代码简要信息</span><br><span class="line">Command+N  生成代码（getter、setter、构造函数、hashCode/equals,toString,实现接口方法）这个还有其他快捷键我只记这一种了</span><br><span class="line">Control+O  覆盖方法(重写父类方法)</span><br><span class="line">Control+I  实现接口方法(我直接记Command+N,也能实现接口方法)</span><br><span class="line">Command+Option+T 包围代码(try catch,if else,do while等)</span><br><span class="line">Command+/ 行注释代码(再按一次就是取消注释)</span><br><span class="line">Command+Option+/ 块注释</span><br><span class="line">Option+方向上  连续选中代码块</span><br><span class="line">Option+方向下  减少选中的代码块</span><br><span class="line">Control+Shift+Q 显示上下文信息</span><br><span class="line">Option+Enter  显示意向动作和快速修复代码</span><br><span class="line">Command+Option+L 格式化代码</span><br><span class="line">Control+Option+O 优化import</span><br><span class="line">Tab  缩进代码</span><br><span class="line">Command+C 复制</span><br><span class="line">Command+V 粘贴</span><br><span class="line">Command+X 剪切</span><br><span class="line">Command+D 复制当前行或选定的块</span><br><span class="line">Command+Delete 删除当前行或选定的行的块</span><br><span class="line">Control+Shift+J 智能的将代码拼接成一行</span><br><span class="line">Command+Enter 智能的拆分拼接的行</span><br><span class="line">Command+加号/减号 展开/折叠代码块</span><br><span class="line">Command+Shift+加号/减号 展开/折叠所有代码块</span><br><span class="line">Command+W 关闭活动的编辑器选项</span><br><span class="line">Command+Shift+上下  上下移动代码</span><br></pre></td></tr></table></figure><h2 id="Search-Replace（查询-替换"><a href="#Search-Replace（查询-替换" class="headerlink" title="Search/Replace（查询/替换)"></a>Search/Replace（查询/替换)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Command+F 文件内查找</span><br><span class="line">Command+Shift+F 全局查找</span><br><span class="line">Command+G 查找模式下向下查找</span><br><span class="line">Command+Shift+G 查找模式下向上查找</span><br></pre></td></tr></table></figure><h2 id="Usage-Search（使用查询）"><a href="#Usage-Search（使用查询）" class="headerlink" title="Usage Search（使用查询）"></a>Usage Search（使用查询）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Option+F7 在文件中查找用到的地方</span><br><span class="line">Command+F7 在类中查找用到的地方</span><br><span class="line">Command+Shift+F7 在类中显示(颜色标记)用到的地方</span><br><span class="line">Command+Option+F7 显示用法</span><br></pre></td></tr></table></figure><h2 id="Compile-and-Run（编译和运行）"><a href="#Compile-and-Run（编译和运行）" class="headerlink" title="Compile and Run（编译和运行）"></a>Compile and Run（编译和运行）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Command+F9 编译Project</span><br><span class="line">Command+Shift+F9 编译选择的文件,包或模块</span><br><span class="line">Control+Option+R 弹出Run的可选菜单</span><br><span class="line">Control+Option+R 弹出Debug的可选菜单</span><br><span class="line">Control+D 调试</span><br></pre></td></tr></table></figure><h2 id="Debug调试"><a href="#Debug调试" class="headerlink" title="Debug调试"></a>Debug调试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">F8 进入下一步,不进入当前方法内</span><br><span class="line">F7 进入下一步,如果当前断点式方法,则进入方法内</span><br><span class="line">Shift+F8 跳出</span><br><span class="line">Option+F9 运行到光标停留处</span><br><span class="line">F9 放开debug </span><br><span class="line">Command+Shift+F8 查看断点信息</span><br></pre></td></tr></table></figure><h2 id="Navigation（导航）"><a href="#Navigation（导航）" class="headerlink" title="Navigation（导航）"></a>Navigation（导航）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Shift+Shift 查找文件</span><br><span class="line">Command+L 跳转行</span><br><span class="line">Command+E 显示最近打开的文件记录列表</span><br><span class="line">Command+Option+方向键左/右  退回/前进到上一个操作的地方</span><br><span class="line">Command+B 或Command+鼠标左键  进入方法或变量的接口或是定义处</span><br><span class="line">Command+Option+B 越过接口,直接跳掉实现处</span><br></pre></td></tr></table></figure><h2 id="Refactoring（重构）"><a href="#Refactoring（重构）" class="headerlink" title="Refactoring（重构）"></a>Refactoring（重构）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">F5 复制文件到指定目录</span><br><span class="line">Command+delete 在文件上安全删除文件,弹出确认框</span><br><span class="line">Shift+F6 重命名文件</span><br><span class="line">Command+Option+M 将选中的代码提取为方法</span><br></pre></td></tr></table></figure><h2 id="General（通用）"><a href="#General（通用）" class="headerlink" title="General（通用）"></a>General（通用）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Command+, 打开idea系统设置</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+      <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>brave heart</title>
     <link href="http://yoursite.com/2018/08/18/%E6%88%91%E5%B0%B1%E6%98%AF%E5%86%99%E7%9D%80%E7%8E%A9%E7%8E%A9%E7%9A%84/"/>
     <id>http://yoursite.com/2018/08/18/我就是写着玩玩的/</id>
     <published>2018-08-18T15:12:45.000Z</published>
-    <updated>2018-08-23T13:33:52.224Z</updated>
+    <updated>2018-09-06T14:14:34.180Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><center>不论是谁 都有想去逃避的时候</center><br><center>只要在那一刻发挥出潜藏的那种力量 便可以清除前路上的障碍</center><br><center>让这个蓝色星球 继续闪耀着光芒</center><br><center>这一定是只有你才能做到的事情</center><center>紧紧抓住 你所拥有的梦想</center><br><center>守护着 你重要的朋友</center><br><center>使自己变得更坚强</center><br><center>潜在的未知力量</center><center>像火焰那般被点燃</center><br><center>你的所有愿望 绝非南柯一梦</center><br><center>都一定可以实现</center><br><center>天空绝不会天天放晴</center><center>所以当寒冷的雨滴下落时 便撑起雨伞吧</center><br><center>生活是没有地图可以指引的 所以我们是自由的</center><br><center>随心所欲 即管前往任何地方</center><br><center>所以冲刺吧!! 用比风还要快的速度</center>]]></content>
     
@@ -38,29 +61,6 @@
     
     
       <category term="song" scheme="http://yoursite.com/tags/song/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/10/28/hello-world/"/>
-    <id>http://yoursite.com/2017/10/28/hello-world/</id>
-    <published>2017-10-28T00:39:58.000Z</published>
-    <updated>2018-08-23T05:09:17.753Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
-      
-    
-    </summary>
-    
-      <category term="测试" scheme="http://yoursite.com/categories/%E6%B5%8B%E8%AF%95/"/>
-    
     
   </entry>
   
