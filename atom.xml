@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-09T02:24:13.972Z</updated>
+  <updated>2018-09-16T15:05:15.372Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java8新特性Lambda和Stream</title>
+    <link href="http://yoursite.com/2018/09/18/Java8%E6%96%B0%E7%89%B9%E6%80%A7Lambda%E5%92%8CStream/"/>
+    <id>http://yoursite.com/2018/09/18/Java8新特性Lambda和Stream/</id>
+    <published>2018-09-18T01:10:55.000Z</published>
+    <updated>2018-09-16T15:05:15.372Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>目前项目应用的是Java 1.8版本,在项目中看到其他小伙伴使用了奇特的编码方式，许多行代码简化成了一行，原来是Java8的特性Lambda和Stream,结合代码和网上查资料学习了一下，并将相关的的知识做了下总结.</p><h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><p>lambda简单的理解就是一个匿名方法，一段带有输入参数的可执行语句块.</p><ul><li>语法：（）-&gt; {}   (小括号里是参数，大括号里是方法体)</li><li>特点：<pre><code>1.参数类型可以省略，编译器可以从上下文环境中推断出来2.当lambda表达式的参数个数只有一个的时候，小括号可以省略3.当lambda表达式只包含一条语句时，可以省略大括号，return，语句结尾的分号4.lambda表达式可以访问外部变量，但是要求这个变量不可变（final修饰）</code></pre></li><li>方法引用：<pre><code>1.类实例引用：   Person::getName2.类静态方法引用：Max::max </code></pre></li><li>构造器引用：<pre><code>Person::new（等同于 x-&gt;new Person(x)）</code></pre></li></ul><hr><h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>Stream（流）是一个来自数据源的元素队列并支持聚合操作。数据源一般是数组或集合等，进行聚合操作可以获取想要的结果。</p><ul><li>基本步骤：获取一个数据源（source）-&gt; 数据转化 -&gt; 执行操作获取想要的结果.(简单说，对 Stream 的使用就是实现一个 filter-map-reduce 过程，产生一个最终结果)</li><li>创建Stream<pre><code>1.Stream静态方法：Stream.of();2.Collection子类获取Stream（最常用）：list.Stream();</code></pre></li><li>Stream流操作<br>  *Intermediate（中间）: 一个流可以跟多个中间操作，主要是打开流对数据进行某种映射或过滤.<pre><code>常见操作:    map() - 对stream里的元素进行映射转化    filter() - 对Stream包含对元素按给定的条件过滤    distinct() - 对stream包含对元素进行去重    sorted() - 对stream包含对元素排序    peek() -  生成一个包含原Stream的所有元素的新Stream，同时会提供一个消费函数（Consumer实例），新Stream每个元素被消费的时候都会执行给定的消费函数        limit() - 对Stream里的元素取前n个    skip(n) - 对stream里的元素丢弃前n个，获取之后的元素    parallel() - 将一个顺序执行的流转变成一个并发的流（还有一种Collection.parallelStream()）    sequential() - 一个并行流转换成一个顺序流        unordered() - 实现无序流</code></pre></li><li>Terminal(终端): 一个流只能有一个终端操作，这是流对最后一个操作，用来处理结果数据。<pre><code>常见操作:     forEach() - 遍历结果数据（并行处理）    forEachOrdered - 遍历结果数据（顺序处理）    toArray（） - 将数据输入到数组中    reduce（） - 把 Stream 元素组合起来。它提供一个起始值（种子），然后依照运算规则（BinaryOperator），和前面 Stream 的第一个、第二个、第 n 个元素组合    collect（） - 实现了很多归约操作，例如将流转换成集合和聚合元素    count() - 获取stream里的元素个数    min() - 最小值    max() - 最大值    anyMatch() - Stream中是否存在任何一个元素满足匹配条件    allMatch() - 是不是Stream中的所有元素都满足给定的匹配条件    noneMatch() - 是不是Stream中的所有元素都不满足给定的匹配条件    findFirst() - 返回Stream中的第一个元素，如果Stream为空，返回空Optional    findAny() - 返回这个Stream中，取到的任何一个对象</code></pre></li><li>简单示例代码<br><img src="http://pdufbfyi3.bkt.clouddn.com/LStest.png" alt=""><br><img src="http://pdufbfyi3.bkt.clouddn.com/test1.png" alt=""><br><img src="http://pdufbfyi3.bkt.clouddn.com/test2.png" alt=""><br><img src="http://pdufbfyi3.bkt.clouddn.com/test3.1.png" alt=""><br><img src="http://pdufbfyi3.bkt.clouddn.com/test3.2.png" alt=""><blockquote><p>参考：<a href="https://yuque.antfin-inc.com/mdc/doc/rhihn7" target="_blank" rel="noopener">https://yuque.antfin-inc.com/mdc/doc/rhihn7</a></p></blockquote></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+      <category term="开发" scheme="http://yoursite.com/categories/%E5%BC%80%E5%8F%91/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Mac系统Idea常用快捷键</title>
