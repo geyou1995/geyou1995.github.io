@@ -81,16 +81,17 @@
 
 
 
-<meta name="description" content="随心所欲 前往任何地方">
-<meta property="og:type" content="website">
-<meta property="og:title" content="我就是胖着玩玩的">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="针对2019个税专项附加扣除做的需求：帮助Hr快速收集员工申报信息，及处理信息，由员工填写表单提交信息，对信息进行处理写入到个税局提供的个税专项附加扣除信息excel模版，最后ZIP打包导出. 大致思路首先需要收集处理员工数据，将excel模版放在服务器上，导出时在服务器上创建一个临时文件夹，读取模版excel文件,将数据循环写入excel模版中(一个员工对应一张excel),将写好数据的exce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="excel读写及Zip打包下载">
+<meta property="og:url" content="http://yoursite.com/2019/01/02/excel读写及ZIp打包下载/index.html">
 <meta property="og:site_name" content="我就是胖着玩玩的">
-<meta property="og:description" content="随心所欲 前往任何地方">
+<meta property="og:description" content="针对2019个税专项附加扣除做的需求：帮助Hr快速收集员工申报信息，及处理信息，由员工填写表单提交信息，对信息进行处理写入到个税局提供的个税专项附加扣除信息excel模版，最后ZIP打包导出. 大致思路首先需要收集处理员工数据，将excel模版放在服务器上，导出时在服务器上创建一个临时文件夹，读取模版excel文件,将数据循环写入excel模版中(一个员工对应一张excel),将写好数据的exce">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-02T11:23:23.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我就是胖着玩玩的">
-<meta name="twitter:description" content="随心所欲 前往任何地方">
+<meta name="twitter:title" content="excel读写及Zip打包下载">
+<meta name="twitter:description" content="针对2019个税专项附加扣除做的需求：帮助Hr快速收集员工申报信息，及处理信息，由员工填写表单提交信息，对信息进行处理写入到个税局提供的个税专项附加扣除信息excel模版，最后ZIP打包导出. 大致思路首先需要收集处理员工数据，将excel模版放在服务器上，导出时在服务器上创建一个临时文件夹，读取模版excel文件,将数据循环写入excel模版中(一个员工对应一张excel),将写好数据的exce">
 
 
 
@@ -120,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/01/02/excel读写及ZIp打包下载/"/>
 
 
 
 
 
-  <title>我就是胖着玩玩的</title>
+  <title>excel读写及Zip打包下载 | 我就是胖着玩玩的</title>
   
 
 
@@ -145,8 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -273,9 +273,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -305,9 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/02/excel读写及ZIp打包下载/" itemprop="url">excel读写及Zip打包下载</a></h1>
+          <h1 class="post-title" itemprop="name headline">excel读写及Zip打包下载</h1>
         
 
         <div class="post-meta">
@@ -390,19 +388,30 @@
       
 
       
-        
-          
-          针对2019个税专项附加扣除做的需求：帮助Hr快速收集员工申报信息，及处理信息，由员工填写表单提交信息，对信息进行处理写入到个税局提供的个税专项附加扣除信息excel模版，最后ZIP打包导出.
-大致思路首先需要收集处理员工数据，将excel模版放在服务器上，导出时在服务器上创建一个临时文件夹，读取模
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/01/02/excel读写及ZIp打包下载/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <p>针对2019个税专项附加扣除做的需求：帮助Hr快速收集员工申报信息，及处理信息，由员工填写表单提交信息，对信息进行处理写入到个税局提供的个税专项附加扣除信息excel模版，最后ZIP打包导出.</p>
+<h2 id="大致思路"><a href="#大致思路" class="headerlink" title="大致思路"></a>大致思路</h2><p>首先需要收集处理员工数据，将excel模版放在服务器上，导出时在服务器上创建一个临时文件夹，读取模版excel文件,将数据循环写入excel模版中(一个员工对应一张excel),将写好数据的excel文件流依次写入该文件夹中，接着打包下载该文件夹，最后删除这个临时文件夹.</p>
+<ul>
+<li>将excel模版放在服务器上<br>将个税局提供的模版放到服务器上，用于读取</li>
+<li>收集处理导出的数据<br>数据是map形式，userId-data,一个员工对应自己的数据</li>
+<li>在服务器上创建一个临时文件夹<br>打包时需要一个文件夹存放一个个excel文件</li>
+<li>将数据写入<br>循环数据，获取excel模版，创建WorkBook写入数据</li>
+<li>处理excel<br>将写好的excel文件命名并写到临时文件夹去</li>
+<li>zip打包下载<br>写完所有数据后，对该临时文件夹打包导出</li>
+<li>删除文件<br>导出后删除临时文件夹</li>
+</ul>
+<h2 id="相关代码"><a href="#相关代码" class="headerlink" title="相关代码"></a>相关代码</h2><h5 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">public static void writeDataToModelExcel(HttpServletRequest request, HttpServletResponse response, Map&lt;String, SalaryTaxExportVO&gt; dataMap, String corpId, String opUserId) throws Exception &#123;</span><br><span class="line">final String folderPath = PATH + FILE_NAME_SPECIAL + LINE + corpId + LINE + opUserId + LINE + UUID.randomUUID().toString().replace(&quot;-&quot;, &quot;&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">//创建唯一临时文件夹路径</span><br><span class="line">//创建扣件单位文件路径集合</span><br><span class="line">List&lt;String&gt; companyPathList = Lists.newArrayList();</span><br><span class="line">//遍历数据写入excel</span><br><span class="line">for (Map.Entry&lt;String, SalaryTaxExportVO&gt; entry : dataMap.entrySet()) &#123;</span><br><span class="line">//获取模版文件excel</span><br><span class="line">ClassPathResource classPathResource = new ClassPathResource(&quot;xls/latestSalaryTaxDeductTemplate.xls&quot;);</span><br><span class="line">//LOGGER.warn(&quot;qqqqq&quot; + Cipher.getMaxAllowedKeyLength(&quot;AES&quot;));</span><br><span class="line">Workbook wb = WorkbookFactory.create(classPathResource.getInputStream());</span><br><span class="line">//3.获取数据</span><br><span class="line">SalaryTaxExportVO salaryTaxExportVO = entry.getValue();</span><br><span class="line">String userId = salaryTaxExportVO.getUserId();</span><br><span class="line">//将数据写到excel模版中</span><br><span class="line">writeDataToTemplate(salaryTaxExportVO, wb);</span><br><span class="line">//将文件写入服务器(创建临时文件夹)</span><br><span class="line">File newFile = new File(folderPath);</span><br><span class="line">if (!newFile.exists()) &#123;</span><br><span class="line">boolean mkdirs = newFile.mkdirs();</span><br><span class="line">if (!mkdirs) &#123;</span><br><span class="line">throw new ExcelException(&quot;文件路径生成失败&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">//获取扣缴单位名称 地区 身份证</span><br><span class="line">String companyName = salaryTaxExportVO.getCompanyName();</span><br><span class="line">if(StringUtils.isBlank(companyName))&#123;</span><br><span class="line">companyName = &quot;无扣缴单位&quot;;</span><br><span class="line">&#125;</span><br><span class="line">String area = salaryTaxExportVO.getArea();</span><br><span class="line">String certNo = salaryTaxExportVO.getCertNo();</span><br><span class="line">//创建扣缴单位文件路径</span><br><span class="line">String companyPath = folderPath + SYMBOL + companyName + SYMBOL;</span><br><span class="line">if (!companyPathList.contains(companyPath)) &#123;</span><br><span class="line">File file = new File(companyPath);</span><br><span class="line">if (!file.exists()) &#123;</span><br><span class="line">file.mkdirs();</span><br><span class="line">&#125;</span><br><span class="line">companyPathList.add(companyPath);</span><br><span class="line">&#125;</span><br><span class="line">// 向扣缴单位文件夹写文件 地区+扣缴单位名称+个人身份号码</span><br><span class="line">List&lt;String&gt; names = Lists.newArrayList();</span><br><span class="line">names.add(area);</span><br><span class="line">names.add(companyName);</span><br><span class="line">names.add(certNo);</span><br><span class="line">names.add(&quot;.xls&quot;);</span><br><span class="line">String fileName = StringUtils.join(names.stream().filter(Objects::nonNull).collect(Collectors.toList()), &quot;&quot;);</span><br><span class="line">FileOutputStream out = new FileOutputStream(companyPath + fileName);</span><br><span class="line">wb.write(out);</span><br><span class="line">wb.close();</span><br><span class="line">&#125;</span><br><span class="line">// 获取zip文件名称 （余杭、建德）+扣缴单位名称</span><br><span class="line">String folderName = &quot;个人所得税专项附加扣除申报文件.zip&quot;;</span><br><span class="line">//打包下载文件</span><br><span class="line">packToDownload(request, response, folderName, folderPath);</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">LOGGER.error(&quot;writeDataToModelExcel error, corpId=&#123;&#125;, userId=&#123;&#125;.&quot;, corpId, opUserId,e);</span><br><span class="line">throw e;</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">// 删除文件</span><br><span class="line">delFolder(folderPath);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="创建zip包"><a href="#创建zip包" class="headerlink" title="创建zip包"></a>创建zip包</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 创建ZIP文件</span><br><span class="line">*</span><br><span class="line">* @param folderPath 文件或文件夹路径</span><br><span class="line">*/</span><br><span class="line">private static void packToDownload(HttpServletRequest request, HttpServletResponse response, String folderName, String folderPath) &#123;</span><br><span class="line">try (</span><br><span class="line">ServletOutputStream outputStream = response.getOutputStream();</span><br><span class="line">ZipOutputStream zos = new ZipOutputStream(outputStream)) &#123;</span><br><span class="line">//设置响应头,必须在写文件前</span><br><span class="line">DownloadUtil.setFileDownloadHeader(request, response, folderName);</span><br><span class="line">writeZip(new File(folderPath), &quot;&quot;, zos);</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">LOGGER.error(&quot;TaxDeductExcelUtil packToDownload 创建ZIP文件失败&quot;, e);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line">*</span><br><span class="line">*写文件</span><br><span class="line">*/</span><br><span class="line">private static void writeZip(File file, String parentPath, ZipOutputStream zos) &#123;</span><br><span class="line">if (file.exists()) &#123;</span><br><span class="line">if (file.isDirectory()) &#123;</span><br><span class="line">//处理文件夹</span><br><span class="line">String filename = file.getName();</span><br><span class="line">if (filename.contains(FILE_NAME_SPECIAL))&#123;</span><br><span class="line">filename = &quot;个人所得税专项附加扣除申报文件&quot;;</span><br><span class="line">&#125;</span><br><span class="line">parentPath += filename + File.separator;</span><br><span class="line">File[] files = file.listFiles();</span><br><span class="line">if (files.length != 0) &#123;</span><br><span class="line">for (File f : files) &#123;</span><br><span class="line">writeZip(f, parentPath, zos);</span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;       //空目录则创建当前目录</span><br><span class="line">try &#123;</span><br><span class="line">zos.putNextEntry(new ZipEntry(parentPath));</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">LOGGER.error(&quot;TaxDeductExcelUtil packToDownload 创建ZIP文件失败&quot;, e);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125; else &#123;</span><br><span class="line">FileInputStream fis = null;</span><br><span class="line">try &#123;</span><br><span class="line">fis = new FileInputStream(file);</span><br><span class="line">ZipEntry ze = new ZipEntry(parentPath + file.getName());</span><br><span class="line">zos.putNextEntry(ze);</span><br><span class="line">byte[] content = new byte[1024];</span><br><span class="line">int len;</span><br><span class="line">while ((len = fis.read(content)) != -1) &#123;</span><br><span class="line">zos.write(content, 0, len);</span><br><span class="line">zos.flush();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">LOGGER.error(&quot;TaxDeductExcelUtil packToDownload 创建ZIP文件失败&quot;, e);</span><br><span class="line">&#125; finally &#123;</span><br><span class="line">try &#123;</span><br><span class="line">if (fis != null) &#123;</span><br><span class="line">fis.close();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">LOGGER.error(&quot;TaxDeductExcelUtil packToDownload 创建ZIP文件失败&quot;, e);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line">*</span><br><span class="line">*设置响应头</span><br><span class="line">*/</span><br><span class="line">public static void setFileDownloadHeader(HttpServletRequest request, HttpServletResponse response, String fileName) &#123;</span><br><span class="line">final String userAgent = request.getHeader(&quot;User-Agent&quot;);</span><br><span class="line">try &#123;</span><br><span class="line">String finalFileName = getEncodeFileName(userAgent, fileName);</span><br><span class="line">response.setContentType(&quot;application/octet-stream&quot;);</span><br><span class="line">response.setHeader(&quot;Content-Disposition&quot;, &quot;attachment; &quot; + finalFileName);</span><br><span class="line">&#125; catch (Exception ignored) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 删除文件</span><br><span class="line">*</span><br><span class="line">* @param folderPath</span><br><span class="line">* @return</span><br><span class="line">*/</span><br><span class="line">private static void delFolder(String folderPath) &#123;</span><br><span class="line">try &#123;</span><br><span class="line">//删除完里面所有内容</span><br><span class="line">delAllFile(folderPath);</span><br><span class="line">java.io.File myFilePath = new java.io.File(folderPath);</span><br><span class="line">//删除空文件夹</span><br><span class="line">myFilePath.delete();</span><br><span class="line">&#125; catch (Exception e) &#123;</span><br><span class="line">LOGGER.error(&quot;TaxDeductExcelUtil delFolder 删除文件失败&quot;, e);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static boolean delAllFile(String path) &#123;</span><br><span class="line">boolean flag = false;</span><br><span class="line">File file = new File(path);</span><br><span class="line">if (!file.exists()) &#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;</span><br><span class="line">if (!file.isDirectory()) &#123;</span><br><span class="line">return false;</span><br><span class="line">&#125;</span><br><span class="line">String[] tempList = file.list();</span><br><span class="line">if (ArrayUtils.isEmpty(tempList)) &#123;</span><br><span class="line">return true;</span><br><span class="line">&#125;</span><br><span class="line">for (String aTempList : tempList) &#123;</span><br><span class="line">File temp;</span><br><span class="line">if (path.endsWith(File.separator)) &#123;</span><br><span class="line">temp = new File(path + aTempList);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">temp = new File(path + File.separator + aTempList);</span><br><span class="line">&#125;</span><br><span class="line">if (temp.isFile()) &#123;</span><br><span class="line">temp.delete();</span><br><span class="line">&#125;</span><br><span class="line">if (temp.isDirectory()) &#123;</span><br><span class="line">//先删除文件夹里面的文件</span><br><span class="line">delAllFile(path + &quot;/&quot; + aTempList);</span><br><span class="line">//再删除空文件夹</span><br><span class="line">delFolder(path + &quot;/&quot; + aTempList);</span><br><span class="line">flag = true;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">return flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ol>
+<li>创建临时文件时，一定要保证文件名唯一（防止同一时间并发，导出串数据），这里采用了corpId-userId-UUID</li>
+<li>后缀.xls表示07之前的版本 使用HSSFWookBook，.xlsx是07之后的版本XSSFWookBook，这里使用POI兼容的方式，自动帮你识别：Workbook wb = WorkbookFactory.create(classPathResource.getInputStream())；</li>
+<li>在循环中每写完一个excel都要关流 wb.close() — 因为是多个excel</li>
+<li>最后一定要删除服务器上的文件（防止文件堆积占用内存）</li>
+<li>HSSF对excel函数方法较多不支持导致导出的文件一些版本的excel内容不可读，不过用WPS可以正常打开</li>
+<li>设置响应头,必须在写文件前</li>
+<li>JCE策略文件-读取excel加密文件时，jdk版本需要在”1.8.0_161以上，否则需要安装第三方jar包（US_export_policy.jar , local_policy.jar　）</li>
+</ol>
+
       
     </div>
     
@@ -419,173 +428,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/maven基础知识/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Youga">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar2.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我就是胖着玩玩的">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/maven基础知识/" itemprop="url">maven基本知识</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T07:49:55+08:00">
-                2018-12-23
-              </time>
+              <a href="/2018/12/23/maven基础知识/" rel="next" title="maven基本知识">
+                <i class="fa fa-chevron-left"></i> maven基本知识
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发/" itemprop="url" rel="index">
-                    <span itemprop="name">开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/12/23/maven基础知识/" class="leancloud_visitors" data-flag-title="maven基本知识">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          maven是项目管理工具，主要有两个特性: 依赖管理和一键构建.
-依赖管理依赖管理就是对jar包的管理过程.传统的工程项目是直接放置jar包，maven工程真正的jar包在仓库中放置，项目中只放置jar包的坐标(pom.xml). 
-仓库分三类 ：本地仓库,远程仓库【私服】,中央仓库.本地仓库是我们
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/23/maven基础知识/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -595,654 +459,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/21/自定义注解使用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Youga">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar2.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我就是胖着玩玩的">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/21/自定义注解使用/" itemprop="url">自定义注解简单使用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-21T07:03:55+08:00">
-                2018-10-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发/" itemprop="url" rel="index">
-                    <span itemprop="name">开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/10/21/自定义注解使用/" class="leancloud_visitors" data-flag-title="自定义注解简单使用">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          需要对一些用户行为的接口进行日志埋点统计,如果在业务代码写的话代码比较杂乱,而且之后改动也不方便,于是便决定使用自定义注解，使用spring的切面注解@Aspect.
-注解的定义Java文件叫做Annotation，用@interface表示。
-元注解@interface上面按需要注解上一些东西，包
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/10/21/自定义注解使用/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Java8新特性Lambda和Stream/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Youga">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar2.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我就是胖着玩玩的">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/18/Java8新特性Lambda和Stream/" itemprop="url">Java8新特性Lambda和Stream</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T09:10:55+08:00">
-                2018-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发/" itemprop="url" rel="index">
-                    <span itemprop="name">开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/09/18/Java8新特性Lambda和Stream/" class="leancloud_visitors" data-flag-title="Java8新特性Lambda和Stream">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          目前项目应用的是Java 1.8版本,在项目中看到其他小伙伴使用了奇特的编码方式，许多行代码简化成了一行，原来是Java8的特性Lambda和Stream,结合代码和网上查资料学习了一下，并将相关的的知识做了下总结.
-lambda表达式lambda简单的理解就是一个匿名方法，一段带有输入参数的可执行
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/18/Java8新特性Lambda和Stream/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/09/Mac系统下Idea快捷键/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Youga">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar2.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我就是胖着玩玩的">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/09/Mac系统下Idea快捷键/" itemprop="url">Mac系统Idea常用快捷键</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-09T10:24:45+08:00">
-                2018-09-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发/" itemprop="url" rel="index">
-                    <span itemprop="name">开发</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/09/09/Mac系统下Idea快捷键/" class="leancloud_visitors" data-flag-title="Mac系统Idea常用快捷键">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          之前一直使用的Java编译工具是eclipse,进新公司之后,公司配了一台Mac并且后端都用IntelliJ IDEA开发,不能脱离团队呀,果断入手了IDEA,不得不说比eclipse更加的智能好用,为了提高开发效率，所以决定整理一下IDEA的常用快捷键,不想每次都配,所以就决定用IDEA默认的快捷
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/09/09/Mac系统下Idea快捷键/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/18/我就是写着玩玩的/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Youga">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar2.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我就是胖着玩玩的">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/18/我就是写着玩玩的/" itemprop="url">brave heart</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-18T23:12:45+08:00">
-                2018-08-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/心情/" itemprop="url" rel="index">
-                    <span itemprop="name">心情</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/08/18/我就是写着玩玩的/" class="leancloud_visitors" data-flag-title="brave heart">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          不论是谁 都有想去逃避的时候只要在那一刻发挥出潜藏的那种力量 便可以清除前路上的障碍让这个蓝色星球 继续闪耀着光芒这一定是只有你才能做到的事情
-
-紧紧抓住 你所拥有的梦想守护着 你重要的朋友使自己变得更坚强潜在的未知力量
-
-像火焰那般被点燃你的所有愿望 绝非南柯一梦都一定可以实现天空绝不会天天放晴
-
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/18/我就是写着玩玩的/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1250,6 +471,10 @@ lambda表达式lambda简单的理解就是一个匿名方法，一段带有输�
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1270,8 +495,17 @@ lambda表达式lambda简单的理解就是一个匿名方法，一段带有输�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1358,6 +592,22 @@ lambda表达式lambda简单的理解就是一个匿名方法，一段带有输�
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#大致思路"><span class="nav-number">1.</span> <span class="nav-text">大致思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关代码"><span class="nav-number">2.</span> <span class="nav-text">相关代码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#主要流程"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">主要流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建zip包"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">创建zip包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除文件"><span class="nav-number">2.0.0.3.</span> <span class="nav-text">删除文件</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意点"><span class="nav-number">3.</span> <span class="nav-text">注意点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
       
 
@@ -1498,6 +748,10 @@ lambda表达式lambda简单的理解就是一个匿名方法，一段带有输�
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
