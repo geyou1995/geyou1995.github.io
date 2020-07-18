@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-07-15T07:45:59.303Z</updated>
+  <updated>2020-07-18T06:50:26.705Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql索引数据结构</title>
+    <link href="http://yoursite.com/2020/07/18/Mysql%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
+    <id>http://yoursite.com/2020/07/18/Mysql索引数据结构/</id>
+    <published>2020-07-18T06:33:55.000Z</published>
+    <updated>2020-07-18T06:50:26.705Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="什么是索引？"><a href="#什么是索引？" class="headerlink" title="什么是索引？"></a>什么是索引？</h1><p>索引是帮助Mysql高效获取排好序的数据结构。</p><h1 id="磁盘IO"><a href="#磁盘IO" class="headerlink" title="磁盘IO"></a>磁盘IO</h1><p>数据库的数据都是存放在本地磁盘里的，每次查询数据都会进行磁盘IO读取数据，将读到的数据加载到内存中比较，Mysql InnoDB默认一次磁盘IO的大小是16K.</p><p>调用以下命令查询</p><p><code>SHOW GLOBAL STATUS like &#39;Innodb_page_size&#39;;</code></p><h1 id="索引数据结构"><a href="#索引数据结构" class="headerlink" title="索引数据结构"></a>索引数据结构</h1><h3 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3><p>首先看下图</p><p><img src="https://github.com/geyou1995/picture/blob/master/1.png?raw=true" alt=""></p><p>假设需要根据字段col2查询col2=22的数据，select * from table where col2 = 22。</p><h5 id="无索引"><a href="#无索引" class="headerlink" title="无索引"></a>无索引</h5><p>全表查，从上至下</p><p>34 -&gt;77 -&gt;55 -&gt;91 -&gt;<font color="#DC143C">22</font></p><p>每一次的查询都会进行一次磁盘IO，可以看出上述操作一共进行了5次磁盘IO才找到了col2=22的数据行。</p><h5 id="使用二叉树索引"><a href="#使用二叉树索引" class="headerlink" title="使用二叉树索引"></a>使用二叉树索引</h5><p>看上图右边的树，就是为上述col2字段建立的一个二叉树索引，我们都知道二叉树索引是大的元素放右边，小的元素放左边。</p><p>根据索引的查询22，首先会查询到34，判断22&lt;34就会去树的左边结点，再次查询就找到22了，所以上述查询采用索引只用了2次磁盘IO</p><h5 id="注：二叉树存储的-key是索引值，value是该索引值对应的数据行地址。"><a href="#注：二叉树存储的-key是索引值，value是该索引值对应的数据行地址。" class="headerlink" title="注：二叉树存储的 key是索引值，value是该索引值对应的数据行地址。"></a>注：二叉树存储的 key是索引值，value是该索引值对应的数据行地址。</h5><h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><p>根据二叉树结点存放的特点，如果给Col1字段建立二叉树索引，就是如下图所示，形成一个单项的链表结构，这样的查询和全表查询没有什么区别。</p><p><img src="https://github.com/geyou1995/picture/blob/master/9.jpg?raw=true" alt=""></p><h3 id="平衡二叉树（AVL）"><a href="#平衡二叉树（AVL）" class="headerlink" title="平衡二叉树（AVL）"></a>平衡二叉树（AVL）</h3><p>为了避免上述二叉树的缺点，进而引入了一种新的数据结构那就是平衡二叉树。</p><p>它有一个非常严格的要求：必须保证左右子树高度差不超过1.</p><p><img src="https://github.com/geyou1995/picture/blob/master/10.jpg?raw=true" alt=""></p><p>它虽然避免了二叉树变成链表结构的尴尬，但是如果数据量非常非常大的情况下，树的层级就会非常的高，这样就会进行多次的磁盘IO,效率就会非常低下，所以AVL也不是Mysql InnoDB的索引结构。</p><h3 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h3><p>BTree做了改进就是它每个结点不止一个元素,每个元素不重复，并且每个结点中的元素从左到右依次递增排序。每个结点都有索引和数据。</p><p><img src="https://github.com/geyou1995/picture/blob/master/2.png?raw=true" alt=""></p><p>还是回到原来的问题，当数据量很大的时候，树的层级还是会很深，又会进行多次磁盘IO，效率就低下了。而且查询不稳定，可能第一次IO就查到数据了，也可能在最后一层叶子结点查询到数据。所以它也不是Mysql InnoDB的索引结构。</p><h3 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+Tree"></a>B+Tree</h3><p><img src="https://github.com/geyou1995/picture/blob/master/3.png?raw=true" alt=""></p><p>比较BTree 和B+Tree的结构图可以看出，B+Tree相较于BTree：</p><h5 id="数据全都存放在叶子结点。"><a href="#数据全都存放在叶子结点。" class="headerlink" title="数据全都存放在叶子结点。"></a>数据全都存放在叶子结点。</h5><p>这样可以保证每次磁盘IO读到的索引元素更多，降低树的高度，增加命中率。</p><p>还可以可以保证查询效率的稳定。</p><h5 id="叶子结点之间有结点指针"><a href="#叶子结点之间有结点指针" class="headerlink" title="叶子结点之间有结点指针"></a>叶子结点之间有结点指针</h5><p>因为索引都是排好序的，这样可以适用于范围查询，提高效率。</p><h5 id="假设下可以存储的索引数量"><a href="#假设下可以存储的索引数量" class="headerlink" title="假设下可以存储的索引数量"></a>假设下可以存储的索引数量</h5><p>一次IO是16K,假设索引是一个bigint(8B),上图空白格表示下一个磁盘地址（6B）</p><p>根节点第一次IO大概：16*1024/(8+6) = 1170</p><p>第二次IO:1170</p><p>叶子结点中有数据行：假设一行数据1KB，一次IO 16K所以可以放16</p><p>这棵树放满大约能放的索引是：1170 <em> 1170</em>  16 = 21902400（2千多万）</p><h5 id="综上："><a href="#综上：" class="headerlink" title="综上："></a>综上：</h5><p>3层的B+Tree结构可以存放2千多万的索引数据</p><p>所以Mysql的InnoDB底层索引结构就是B+Tree. 一些高版本的mysql会将根节点直接加载到内存，查询到时候可以免去第一次磁盘IO.</p><h3 id="Hash结构"><a href="#Hash结构" class="headerlink" title="Hash结构"></a>Hash结构</h3><p><img src="https://github.com/geyou1995/picture/blob/master/4.png?raw=true" alt=""></p><p>Hash结构底层是数组和链表</p><h5 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h5><p>将索引的值进行hash运算，算出该元素所在的桶的位置，然后判断该位置是否有元素，没有就直接塞进去，有的话说明hash冲突，用链表连接。</p><h5 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h5><p>查询数据的时候也先将值进行hash运算，找到具体的位置查找。类似于HashMap的底层原理吧。</p><h5 id="综上：-1"><a href="#综上：-1" class="headerlink" title="综上："></a>综上：</h5><p>hash运算非常的开，所以hash结构查询效率非常快，但是它无法支持范围查询。</p><h1 id="聚集索引与非聚集索引"><a href="#聚集索引与非聚集索引" class="headerlink" title="聚集索引与非聚集索引"></a>聚集索引与非聚集索引</h1><p><img src="https://github.com/geyou1995/picture/blob/master/5.png?raw=true" alt=""></p><p>上述是一行一行的数据…</p><h3 id="聚集索引"><a href="#聚集索引" class="headerlink" title="聚集索引"></a>聚集索引</h3><p><img src="https://github.com/geyou1995/picture/blob/master/6.png?raw=true" alt=""></p><p>聚集索引：叶子结点包含数据的，索引和数据放在一起的。</p><p>聚集索引的确定（依次选择）：B+tree默认首先获取主键 -&gt; 不为null的唯一键列 -&gt; 默认生成一个id行</p><h3 id="非聚集索引"><a href="#非聚集索引" class="headerlink" title="非聚集索引"></a>非聚集索引</h3><p><img src="https://github.com/geyou1995/picture/blob/master/7.png?raw=true" alt=""></p><p>非聚集索引：叶子结点不包含数据的，放的是主键的id。</p><p>这样做是为了节约存储空间；也保证一致性，数据行修改了不用两棵树都去修改。</p><h1 id="InnoDB-表建立主键，主键通常都用整型且自增的原因"><a href="#InnoDB-表建立主键，主键通常都用整型且自增的原因" class="headerlink" title="InnoDB 表建立主键，主键通常都用整型且自增的原因"></a>InnoDB 表建立主键，主键通常都用整型且自增的原因</h1><p>用整型的原因：索引用整型比较大小快。</p><p>自增的原因：因为叶子结点都是排好序的，如果不自增，可能会导致树结构的自平衡，影响效率。</p><h1 id="联合索引-复合索引为什么是最左前缀原理？"><a href="#联合索引-复合索引为什么是最左前缀原理？" class="headerlink" title="联合索引/复合索引为什么是最左前缀原理？"></a>联合索引/复合索引为什么是最左前缀原理？</h1><p>首先看下联合索引的索引结构图</p><p><img src="https://github.com/geyou1995/picture/blob/master/8.png?raw=true" alt=""></p><p>可以看到联合索引的顺序是：name、age、position</p><p>因为索引都是排好序的，按上面的结构，必须先找到name,</p><p>假设是Bill，在Bill的基础上，age是排好序的</p><p>不然人工直接找age，它就是没有顺序的</p><h6 id="综上：联合索引是一级一级查询的，所以按最左前缀原理。"><a href="#综上：联合索引是一级一级查询的，所以按最左前缀原理。" class="headerlink" title="综上：联合索引是一级一级查询的，所以按最左前缀原理。"></a>综上：联合索引是一级一级查询的，所以按最左前缀原理。</h6>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+      <category term="Mysql" scheme="http://yoursite.com/categories/Mysql/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Idea 查看源码</title>
