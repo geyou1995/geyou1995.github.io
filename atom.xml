@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-07-20T11:52:09.737Z</updated>
+  <updated>2020-08-01T13:54:55.619Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MVCC机制</title>
+    <link href="http://yoursite.com/2020/08/01/MVCC%E6%9C%BA%E5%88%B6/"/>
+    <id>http://yoursite.com/2020/08/01/MVCC机制/</id>
+    <published>2020-08-01T13:53:55.000Z</published>
+    <updated>2020-08-01T13:54:55.619Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="MVCC概述"><a href="#MVCC概述" class="headerlink" title="MVCC概述"></a>MVCC概述</h1><p>Mysql在可重复读隔离级别下，同样的sql查询语句在一个事务里多次执行查询结果是相同的，就算其他事物对数据有修改也不会影响当前事物sql语句的查询结果。<br>这个隔离性就是靠MVCC（多版本并发控制）机制保证的，对一行数据的读和写两个操作默认不会通过加锁互斥来保证隔离性，避免了 频繁加锁。</p><h1 id="MVCC机制的实现"><a href="#MVCC机制的实现" class="headerlink" title="MVCC机制的实现"></a>MVCC机制的实现</h1><h3 id="undo日志"><a href="#undo日志" class="headerlink" title="undo日志"></a>undo日志</h3><p>undo日志版本链是指一行数据被多个事务依次修改后，在每个事务修改完后，mysql会保留修改之前的数据在undo日志，并且用两个隐藏字段<strong>trx_id(事务id)和rollpoint（指针</strong>）把这些日志记录连接起来，形成一个历史记录版本链。如下图</p><p><img src="https://github.com/geyou1995/picture/blob/master/undo-1.jpg?raw=true" alt=""></p><p><strong>红色代表id=1的这行历史修改记录，蓝色代表最新数据。</strong><br>undo日志只有一份。</p><h3 id="Read-view-一致性视图"><a href="#Read-view-一致性视图" class="headerlink" title="Read-view 一致性视图"></a>Read-view 一致性视图</h3><p>每个事务开启都会维护一份自己的一致性视图。<br><strong>视图组成</strong><br>执行查询时所有未提交事务的id数组 + 已创建的最大事务id组成</p><p><strong>视图生成时机</strong><br>可重复读隔离级别，在第一次查询就会生成Read view。<br>读已提交隔离级别， 每次读都会生成一份最新的Read view</p><p><strong>版本对比举例</strong><br>事务里的任何sql查询结果需要从对应的版本链的最新数据开始逐条做对比得到最终的结果。<br>拿上图数据举例：假设事务A的视图为[200] 300，去查询id=1的数据<br>                                首先找到蓝色最新的数据,事务id是200,200在事务A的一致性视图中是属于未提交的，所以数据                                不可见，再找下一条事务id也是200,还是不可见，逐一比对，到事务id=100时，100不在事务A<br>                                的一致性视图里，说明是已提交的事务，所以最终得到的值就是’lilei2’。</p><h3 id="版本链对比规则"><a href="#版本链对比规则" class="headerlink" title="版本链对比规则"></a>版本链对比规则</h3><p><img src="https://github.com/geyou1995/picture/blob/master/undo-2.jpg?raw=true" alt=""></p><p>如果undo日志里的数据行trx_id(事务id)落在绿色部分，说明这个版本是已提交的事务生成的，所以数据可见。<br>如果undo日志里的数据行trx_id(事务id)落在红色部分，说明这个版本是由将来启动的事务生成，肯定不可见。<br>如果undo日志里的数据行trx_id(事务id)落在黄色部分，就需要判断了<br>    a.trx_id在视图数组里，说明这个版本是由还没提交的事务生成的，数据不可见。<br>    b.trx_id不在视图数组里,说明这个版本是已经提交的事务生成的,数据可见。</p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>MVCC机制的实现就是通过<strong>read-view机制</strong>与<strong>undo版本链对比机制</strong>，使得不同的事务会根据数据版本链对比规则读取同一条数据在版本链上不同版本的数据。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+      <category term="Mysql" scheme="http://yoursite.com/categories/Mysql/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Mysql事务隔离级别与锁机制</title>
+    <link href="http://yoursite.com/2020/08/01/Mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8E%E9%94%81%E6%9C%BA%E5%88%B6/"/>
+    <id>http://yoursite.com/2020/08/01/Mysql事务隔离级别与锁机制/</id>
+    <published>2020-08-01T01:52:55.000Z</published>
+    <updated>2020-08-01T04:26:07.902Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="为什么要事务隔离与锁机制？"><a href="#为什么要事务隔离与锁机制？" class="headerlink" title="为什么要事务隔离与锁机制？"></a>为什么要事务隔离与锁机制？</h1><p>数据库一般都会并发执行多个事务，多个事务间可能会并发对相同的一批数据进行增删改查操作，就可能会造成一些事务隔离性问题，例如：脏写、脏读、不可重复读、幻读。</p><h1 id="事务及其ACID属性"><a href="#事务及其ACID属性" class="headerlink" title="事务及其ACID属性"></a>事务及其ACID属性</h1><p>事务是由一组SQL语句组成的逻辑处理单元,具有以下4个属性,简称事务的ACID属性。<br><strong><em>原子性</em></strong><br>执行事务操作，一系列对数据修改的操作，这些操作要么全部执行成功，要么全部失败。<br><strong><em>一致性</em></strong><br>事务开始到结束，数据必须保持一致性。<br>举例：银行转账操作，两个账户转钱。账户的总金额不会改变。<br><strong><em>隔离性</em></strong><br>多个事务之间相互隔离，互相不打扰。（这里可能有许多隔离性问题）<br><strong><em>永久性</em></strong><br>事务结束后，数据的修改会永久的保存在数据库里。</p><h1 id="事务隔离性问题"><a href="#事务隔离性问题" class="headerlink" title="事务隔离性问题"></a>事务隔离性问题</h1><p><strong><em>脏写</em></strong><br>假设同时开启事务A,B,选择数据表中同一行数据进行修改，A事务先完成了对数据的修改并提交了事务，之后B事务对同一数据也修改提交。最终数据库里的数据是事务B修改的数据。覆盖了A之前修改的数据。就造成了脏写。</p><p><strong><em>脏读</em></strong><br>两个事务A,B，事务B读到了事务A已经修改但是还没有提交的数据。<br>事务A对数据行进行了修改，但是还没有提交事务。这时事务B读到了A事务还没有提交的事务，还用这个数据去操作。如果A事务回滚了，那这个数据就是无效的。不符合一致性要求。</p><p><strong><em>不可重复读</em></strong><br>线程AB开启事务，A,B同时读到一行数据，A更新了这条数据，并提交了事务，B还未提交事务，重新去读这行数据，导致B一次事务里两次读到的数据不相同。</p><p><strong><em>幻读</em></strong><br>幻读类似不可重复读;不可重复读针对查询操作;幻读针对读是插入和删除操作。</p><h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><p>针对以上问题，Mysql数据库提供了一定的事务隔离级别机制来解决。</p><p><img src="https://github.com/geyou1995/picture/blob/master/shiwugeli.jpg?raw=true" alt=""></p><p>Mysql数据库默认的隔离级别是<strong>可重复读</strong>。</p><p><strong>查看当前数据库的事务隔离级别</strong>: show variables like ‘tx_isolation’;</p><p><strong>设置事务隔离级别</strong>：set tx_isolation=’REPEATABLE-READ’;</p><h1 id="MySql锁机制"><a href="#MySql锁机制" class="headerlink" title="MySql锁机制"></a>MySql锁机制</h1><h3 id="锁详解"><a href="#锁详解" class="headerlink" title="锁详解"></a>锁详解</h3><p>锁是计算机协调多个进程或线程并发访问某一资源的机制。在数据库中，除了传统的计算资源（CPU、RAM、I/O等）竞争外，数据也是一种共享等资源。</p><h3 id="锁分类"><a href="#锁分类" class="headerlink" title="锁分类"></a>锁分类</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">从性能上分</span><br><span class="line">乐观锁</span><br><span class="line">用版本号对比来实现，每次修改数据的时候会先比较读到数据的版本号和最新的版本号是否一致，一致就可以修改，否则不行。乐观锁实际上是不加锁的。</span><br><span class="line"></span><br><span class="line">悲观锁</span><br><span class="line">对数据进行加锁，访问资源需要竞争锁。</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">从对数据库操作的类型分</span><br><span class="line">分为读锁写锁，都是悲观锁。**读锁会阻塞写，写锁会阻塞读和写。</span><br><span class="line"></span><br><span class="line">读锁</span><br><span class="line">读锁也称共享锁，S锁（share），针对同一份数据，多个读操作可以进行而不会相互影响。</span><br><span class="line"></span><br><span class="line">写锁</span><br><span class="line">写锁也称排他锁，X锁（eXclusive），针对同一份数据，写操作没有完成，其他事物的读/写都会堵塞。</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">从对数据操作的粒度分</span><br><span class="line">MyISAM是表锁。InnoDB查询的时候有mvcc机制不会加锁，但是更新、插入、删除操作会加行锁。</span><br><span class="line"></span><br><span class="line">表锁</span><br><span class="line">每次操作都会锁住整张表。找到表就可以加锁，开销小，加锁快。锁的粒度大，不会出现死锁。发生锁冲突的概率最高，**一般用在整表数据的迁移**。</span><br><span class="line"></span><br><span class="line">行锁</span><br><span class="line">每次操作锁住操作涉及到的数据行。需要找到对应的数据行才能加锁，开销大，加锁慢。锁的粒度小，会出现死锁。</span><br></pre></td></tr></table></figure><h1 id="锁和事务隔离级别"><a href="#锁和事务隔离级别" class="headerlink" title="锁和事务隔离级别"></a>锁和事务隔离级别</h1><h3 id="隔离级别设置"><a href="#隔离级别设置" class="headerlink" title="隔离级别设置"></a>隔离级别设置</h3><p>​    <strong>读未提交</strong>  set tx_isolation=’read-uncommitted’;<br>​    <strong>读已提交</strong>  set tx_isolation=’read-committed’;<br>​    <strong>可重复读</strong>  set tx_isolation=’repeatable-read’;<br>​    <strong>串行化</strong>     set tx_isolation=’serializable’;</p><h3 id="锁和事务隔离级别-1"><a href="#锁和事务隔离级别-1" class="headerlink" title="锁和事务隔离级别"></a>锁和事务隔离级别</h3><p><strong><em>可重复读</em></strong><br>就是假设某一事务对数据行就行了<strong>更新操作</strong>就会对涉及到的数据行加行锁。<br><strong><em>序列化</em></strong><br>只要开启了事务，之后的操作，不管<strong>查询操作</strong>还是<strong>更新操作</strong>，对涉及到的数据行全部加行锁，所以性能差。<br><strong><em>间隙锁</em></strong><br>因为mysql的默认隔离级别是可重复读，会有幻读的问题。可以引入间隙锁在某些情况下可以解决该问题。</p><p><img src="https://github.com/geyou1995/picture/blob/master/jxs.jpg?raw=true" alt=""></p><p>如上表所示间隙就有id为 （3，10）、(10,20)、(20,正无穷)<br>防止幻读就是需要被涉及的数据行加锁<br>update account set name = ‘萧峰666’ where id &gt; 8 and id &lt;18;<br>上述sql会对id值有在（3，10）区间的，也有在（10，20）区间的，所以最终被锁定的区间是（3，20],其他事务没法在这区间插入或修改任何数据。<br><strong>间隙锁只在可重复读隔离级别下才生效。</strong></p><h1 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h1><ul><li>尽可能让所有数据检索都通过索引完成，避免无索引行锁升级为表锁。</li><li>合理设计索引，减小锁的范围。</li><li>尽可能减小检索条件范围，避免间隙锁。</li><li>尽量控制事务大小，减小锁定资源量和时间长度，涉及事务加锁的sql放在事务最后执行。</li><li>尽可能低级别事务隔离</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;/assets/css/APlayer.min.css&quot;&gt;&lt;script src=&quot;/assets/js/APlayer.min.js&quot; cla
+      
+    
+    </summary>
+    
+      <category term="Mysql" scheme="http://yoursite.com/categories/Mysql/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>SQL优化</title>
