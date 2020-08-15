@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="什么是JMM模型？JMM模型就是Java内存模型，是一种抽象的概念,并不真实存在。它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（实例字段、静态字段、构成数组对象的元素）的访问方式。JVM运行程序的实体是线程，每当创建线程时JVM都会为其创建一个工作内存,每个线程都有自己独有的工作内存存储私有数据，但是JMM规定所有的变量都存储在主内存，主内存是共享区域，所有线程都可以访问，但是对变量">
+<meta name="description" content="概念volatile是Java虚拟机提供的轻量级的同步机制。volatile能保证并发编程的两个问题：可见性和有序性。 可见性 问题：从JMM模型可以知道，线程都是从总内存中加载变量到自己的工作内存，所以在多线程情况下，线程A获取了主内存的共享变量X，线程B也获取了变量X，并且将它修改。这时线程A无法立刻知道自己工作内存里的变量X与主线内存的变量X已经不同。 解决：使用volatile修饰共享变量">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JMM模型">
-<meta property="og:url" content="http://yoursite.com/2020/08/08/JMM模型/index.html">
+<meta property="og:title" content="volatile关键字">
+<meta property="og:url" content="http://yoursite.com/2020/08/15/Volatile关键字/index.html">
 <meta property="og:site_name" content="我就是胖着玩玩的">
-<meta property="og:description" content="什么是JMM模型？JMM模型就是Java内存模型，是一种抽象的概念,并不真实存在。它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（实例字段、静态字段、构成数组对象的元素）的访问方式。JVM运行程序的实体是线程，每当创建线程时JVM都会为其创建一个工作内存,每个线程都有自己独有的工作内存存储私有数据，但是JMM规定所有的变量都存储在主内存，主内存是共享区域，所有线程都可以访问，但是对变量">
+<meta property="og:description" content="概念volatile是Java虚拟机提供的轻量级的同步机制。volatile能保证并发编程的两个问题：可见性和有序性。 可见性 问题：从JMM模型可以知道，线程都是从总内存中加载变量到自己的工作内存，所以在多线程情况下，线程A获取了主内存的共享变量X，线程B也获取了变量X，并且将它修改。这时线程A无法立刻知道自己工作内存里的变量X与主线内存的变量X已经不同。 解决：使用volatile修饰共享变量">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/jmm.png?raw=true">
-<meta property="og:updated_time" content="2020-08-08T12:07:35.155Z">
+<meta property="og:updated_time" content="2020-08-15T08:46:41.191Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JMM模型">
-<meta name="twitter:description" content="什么是JMM模型？JMM模型就是Java内存模型，是一种抽象的概念,并不真实存在。它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（实例字段、静态字段、构成数组对象的元素）的访问方式。JVM运行程序的实体是线程，每当创建线程时JVM都会为其创建一个工作内存,每个线程都有自己独有的工作内存存储私有数据，但是JMM规定所有的变量都存储在主内存，主内存是共享区域，所有线程都可以访问，但是对变量">
+<meta name="twitter:title" content="volatile关键字">
+<meta name="twitter:description" content="概念volatile是Java虚拟机提供的轻量级的同步机制。volatile能保证并发编程的两个问题：可见性和有序性。 可见性 问题：从JMM模型可以知道，线程都是从总内存中加载变量到自己的工作内存，所以在多线程情况下，线程A获取了主内存的共享变量X，线程B也获取了变量X，并且将它修改。这时线程A无法立刻知道自己工作内存里的变量X与主线内存的变量X已经不同。 解决：使用volatile修饰共享变量">
 <meta name="twitter:image" content="https://github.com/geyou1995/picture/blob/master/jmm.png?raw=true">
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/08/08/JMM模型/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/08/15/Volatile关键字/"/>
 
 
 
 
 
-  <title>JMM模型 | 我就是胖着玩玩的</title>
+  <title>volatile关键字 | 我就是胖着玩玩的</title>
   
 
 
@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/08/JMM模型/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/Volatile关键字/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Youga">
@@ -307,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JMM模型</h1>
+          <h1 class="post-title" itemprop="name headline">volatile关键字</h1>
         
 
         <div class="post-meta">
@@ -319,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-08T18:42:55+08:00">
-                2020-08-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-15T15:03:55+08:00">
+                2020-08-15
               </time>
             
 
@@ -359,7 +359,7 @@
 
           
           
-             <span id="/2020/08/08/JMM模型/" class="leancloud_visitors" data-flag-title="JMM模型">
+             <span id="/2020/08/15/Volatile关键字/" class="leancloud_visitors" data-flag-title="volatile关键字">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -390,13 +390,16 @@
       
 
       
-        <h1 id="什么是JMM模型？"><a href="#什么是JMM模型？" class="headerlink" title="什么是JMM模型？"></a>什么是JMM模型？</h1><p>JMM模型就是Java内存模型，是一种抽象的概念,并不真实存在。它描述的是一组规则或规范，通过这组规范定义了程序中各个变量（实例字段、静态字段、构成数组对象的元素）的访问方式。<br>JVM运行程序的实体是线程，每当创建线程时JVM都会为其创建一个工作内存,每个线程都有自己独有的工作内存存储私有数据，但是JMM规定所有的变量都存储在主内存，主内存是共享区域，所有线程都可以访问，但是对变量的操作需要在各自的工作内存中操作，操作完后写回主内存,不能直接操作主内存中的变量。<br><img src="https://github.com/geyou1995/picture/blob/master/jmm.png?raw=true" alt=""></p>
-<h1 id="数据同步八大原子操作"><a href="#数据同步八大原子操作" class="headerlink" title="数据同步八大原子操作"></a>数据同步八大原子操作</h1><p>关于主内存和工作内存之间的具体交互协议，即一个变量如何从主内存拷贝到工作内存，如何从工作内存同步到主内存之间的实现,JMM定义了以下8种操作完成。<br><strong>lock(锁定)</strong><br>作用与主内存的变量，把一个变量标记为一条线程独占状态。<br><strong>unlock(解锁)</strong><br>作用与主内存的变量，把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。<br><strong>read(读取)</strong><br>将主内存的数据拷贝一份，便于随后的load使用<br><strong>load(载入)</strong><br>将read拷贝的数据加载到工作内存中<br><strong>use(使用)</strong><br>将工作内存中的数据变量给执行引擎进行逻辑修改<br><strong>assign(赋值)</strong><br>将执行引擎修改的值写回线程的工作内存<br><strong>store(存储)</strong><br>将工作内存的值拷贝一份出来<br><strong>write(写入)</strong><br>将store出来的值写回主内存</p>
-<p>举例：假设线程A要修改主内存中的变量a = 0 -&gt; a=1<br>首先<strong>read</strong>将主内存的变量a=0拷贝一份，通过<strong>load</strong>加载到线程A的工作内存,然后<strong>use</strong>将工作内存中a=0交给执行引擎，执行引擎将a=0修改为a=1，<strong>assign</strong>将a=1写回工作内存，<strong>store</strong>将工作内存中的a=1拷贝一份出来，<strong>write</strong>将a=1写回主内存。</p>
-<h1 id="并发编程三大特性"><a href="#并发编程三大特性" class="headerlink" title="并发编程三大特性"></a>并发编程三大特性</h1><p><strong>原子性</strong><br>原子性指的是一个操作是不可中断的，即使是在多线程环境下，一个操作一旦开始就不会被其他线程影响。<br>通常使用 synchronized、Lock （ volatile不保证原子性）</p>
-<p><strong>可见性</strong><br>当一个线程修改了某个共享变量 的值，其他线程是否能够马上得知这个修改的值。<br>volatile可以解决可见性（保证能否及时看到）。</p>
-<p><strong>有序性</strong></p>
-<p>有序性是指对于单线程的执行代码，我们总是认为代码的执行是按顺序依次执行的，但对于多线程环境，则可能出现乱序现象，因为程序编译成机器码指令后可能会出现指令重排现象，重排后的指令与原指令的顺序未必一致。<br>volatile可以防止指令重排。</p>
+        <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>volatile是Java虚拟机提供的轻量级的同步机制。<br>volatile能保证并发编程的两个问题：可见性和有序性。</p>
+<h1 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h1><p><img src="https://github.com/geyou1995/picture/blob/master/jmm.png?raw=true" alt=""></p>
+<p><strong>问题：</strong><br>从JMM模型可以知道，线程都是从总内存中加载变量到自己的工作内存，所以在多线程情况下，线程A获取了主内存的共享变量X，线程B也获取了变量X，并且将它修改。这时线程A无法立刻知道自己工作内存里的变量X与主线内存的变量X已经不同。</p>
+<p><strong>解决：</strong><br>使用volatile修饰共享变量.</p>
+<p><strong>缓存一致性原则MESI</strong><br>M 已修改状态 （加锁成功）<br>E  独占状态 （一个cpu读到）<br>S  共享状态（多个cpu读到）<br>I  失效状态 （收到其他cpu的消息）<br>当其他线程把主内存的值修改后，工作内存的缓存就被消除掉了。底层就是volatile 调用一个lock指令，修改值经过总线的时候会触发缓存一致性协议，将其他工作内存对应的缓存值变为失效状态，其他线程需要读取值需要重新去主内存读取。</p>
+<h1 id="防指令重排"><a href="#防指令重排" class="headerlink" title="防指令重排"></a>防指令重排</h1><p><code></code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public  LazySingleton getInstance3() &#123;</span><br><span class="line"></span><br><span class="line">        if (instance == null) &#123;</span><br><span class="line">            // 实例化对象  加锁</span><br><span class="line">            synchronized(LazySingleton.class) &#123;</span><br><span class="line">                if(instance == null) &#123;</span><br><span class="line">                    instance = new LazySingleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        // 返回对象</span><br><span class="line">        return instance;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>问题:</strong><br>上图是单例模式double check，LazySingleton的实例化需要经过<br><strong>分配空间 -&gt; 初始化 -&gt; 引用赋值</strong>,但是JVM底层可能会对其指令重排为<br><strong>分配空间 -&gt; 引用赋值 -&gt; 初始化</strong>，这样返回的instance可能只是赋值而未初始化，可能有npe问题。</p>
+<p><strong>解决：</strong><br>使用volatile修饰该实例对象.</p>
+<p><strong>内存屏障</strong><br>内存屏障，又称内存栅栏，是一个CPU指令，它的作用有两个，一是保证特定操作的执行顺序，二是保证某些变量的内存可见性（利用该特性实现volatile的内存可见性）。由于编译器和处理器都能执行指令重排优化。如果在指令间插入一条Memory Barrier则会告诉编译器和CPU，不管什么指令都不能和这条Memory Barrier指令重排序，也就是说通过插入内存屏障禁止在内存屏障前后的指令执行重排序优化。Memory Barrier的另外一个作用是强制刷出各种CPU的缓存数据，因此任何CPU上的线程都能读取到这些数据的最新版本。 总之，volatile变量正是通过内存屏障实现其在内存中的语义，即可见性和禁止重排优化。</p>
 
       
     </div>
@@ -421,8 +424,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/08/01/MVCC机制/" rel="next" title="MVCC机制">
-                <i class="fa fa-chevron-left"></i> MVCC机制
+              <a href="/2020/08/08/JMM模型/" rel="next" title="JMM模型">
+                <i class="fa fa-chevron-left"></i> JMM模型
               </a>
             
           </div>
@@ -431,8 +434,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/08/15/Volatile关键字/" rel="prev" title="volatile关键字">
-                volatile关键字 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/08/15/Synchronized关键字/" rel="prev" title="Syncronized关键字">
+                Syncronized关键字 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -583,7 +586,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是JMM模型？"><span class="nav-number">1.</span> <span class="nav-text">什么是JMM模型？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据同步八大原子操作"><span class="nav-number">2.</span> <span class="nav-text">数据同步八大原子操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并发编程三大特性"><span class="nav-number">3.</span> <span class="nav-text">并发编程三大特性</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可见性"><span class="nav-number">2.</span> <span class="nav-text">可见性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#防指令重排"><span class="nav-number">3.</span> <span class="nav-text">防指令重排</span></a></li></ol></div>
             
 
           </div>
