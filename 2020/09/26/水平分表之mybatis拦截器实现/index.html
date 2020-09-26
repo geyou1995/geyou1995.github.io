@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="概念Syncronized是JVM自带的关键字，主要用来解决线程并的原子性问题。Syncronized保证多个线程并发，在同一时刻只能有一个线程访问临界资源。在多线程可能出现同时访问一个共享、可变资源的情况，这个资源叫临界资源（对象、变量、文件等）。 用法静态方法：类锁,锁得是当前类的class对象普通方法：对象锁,锁得是当前实例对象同步代码块：锁得是括号里的对象 注：一个类只有一个class,可">
+<meta name="description" content="需求背景最近项目中的几张表数据行超过了1000万行，所以需要对这些表进行水平分表，提高数据查询的性能。可选的方案有sharding-jdbc中间件还有就是Mybatis拦截器。由于个别表数据涉及了复杂的sql查询，可能会有意想不到的坑，所以决定采用Mybatis拦截器的方式。所以决定记录下来实现过程。 分表思路这里我需要分表的表名为process_log,这里不是根据正常的id字段去分表（因为这张">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Syncronized关键字">
-<meta property="og:url" content="http://yoursite.com/2020/08/15/Synchronized关键字/index.html">
+<meta property="og:title" content="Mybaits拦截器实现水平分表">
+<meta property="og:url" content="http://yoursite.com/2020/09/26/水平分表之mybatis拦截器实现/index.html">
 <meta property="og:site_name" content="我就是胖着玩玩的">
-<meta property="og:description" content="概念Syncronized是JVM自带的关键字，主要用来解决线程并的原子性问题。Syncronized保证多个线程并发，在同一时刻只能有一个线程访问临界资源。在多线程可能出现同时访问一个共享、可变资源的情况，这个资源叫临界资源（对象、变量、文件等）。 用法静态方法：类锁,锁得是当前类的class对象普通方法：对象锁,锁得是当前实例对象同步代码块：锁得是括号里的对象 注：一个类只有一个class,可">
+<meta property="og:description" content="需求背景最近项目中的几张表数据行超过了1000万行，所以需要对这些表进行水平分表，提高数据查询的性能。可选的方案有sharding-jdbc中间件还有就是Mybatis拦截器。由于个别表数据涉及了复杂的sql查询，可能会有意想不到的坑，所以决定采用Mybatis拦截器的方式。所以决定记录下来实现过程。 分表思路这里我需要分表的表名为process_log,这里不是根据正常的id字段去分表（因为这张">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/syncronized.jpg?raw=true">
-<meta property="og:updated_time" content="2020-08-15T08:15:13.107Z">
+<meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/mybatisIN.png?raw=true">
+<meta property="og:updated_time" content="2020-09-26T12:13:16.175Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Syncronized关键字">
-<meta name="twitter:description" content="概念Syncronized是JVM自带的关键字，主要用来解决线程并的原子性问题。Syncronized保证多个线程并发，在同一时刻只能有一个线程访问临界资源。在多线程可能出现同时访问一个共享、可变资源的情况，这个资源叫临界资源（对象、变量、文件等）。 用法静态方法：类锁,锁得是当前类的class对象普通方法：对象锁,锁得是当前实例对象同步代码块：锁得是括号里的对象 注：一个类只有一个class,可">
-<meta name="twitter:image" content="https://github.com/geyou1995/picture/blob/master/syncronized.jpg?raw=true">
+<meta name="twitter:title" content="Mybaits拦截器实现水平分表">
+<meta name="twitter:description" content="需求背景最近项目中的几张表数据行超过了1000万行，所以需要对这些表进行水平分表，提高数据查询的性能。可选的方案有sharding-jdbc中间件还有就是Mybatis拦截器。由于个别表数据涉及了复杂的sql查询，可能会有意想不到的坑，所以决定采用Mybatis拦截器的方式。所以决定记录下来实现过程。 分表思路这里我需要分表的表名为process_log,这里不是根据正常的id字段去分表（因为这张">
+<meta name="twitter:image" content="https://github.com/geyou1995/picture/blob/master/mybatisIN.png?raw=true">
 
 
 
@@ -123,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/08/15/Synchronized关键字/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/09/26/水平分表之mybatis拦截器实现/"/>
 
 
 
 
 
-  <title>Syncronized关键字 | 我就是胖着玩玩的</title>
+  <title>Mybaits拦截器实现水平分表 | 我就是胖着玩玩的</title>
   
 
 
@@ -290,7 +290,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/15/Synchronized关键字/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/26/水平分表之mybatis拦截器实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Youga">
@@ -307,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Syncronized关键字</h1>
+          <h1 class="post-title" itemprop="name headline">Mybaits拦截器实现水平分表</h1>
         
 
         <div class="post-meta">
@@ -319,8 +319,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-15T17:03:55+08:00">
-                2020-08-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-26T18:49:55+08:00">
+                2020-09-26
               </time>
             
 
@@ -342,8 +342,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
+                  <a href="/categories/Java开发/" itemprop="url" rel="index">
+                    <span itemprop="name">Java开发</span>
                   </a>
                 </span>
 
@@ -359,7 +359,7 @@
 
           
           
-             <span id="/2020/08/15/Synchronized关键字/" class="leancloud_visitors" data-flag-title="Syncronized关键字">
+             <span id="/2020/09/26/水平分表之mybatis拦截器实现/" class="leancloud_visitors" data-flag-title="Mybaits拦截器实现水平分表">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -390,17 +390,24 @@
       
 
       
-        <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>Syncronized是JVM自带的关键字，主要用来解决线程并的原子性问题。Syncronized保证多个线程并发，在同一时刻只能有一个线程访问临界资源。<br>在多线程可能出现同时访问一个共享、可变资源的情况，这个资源叫临界资源（对象、变量、文件等）。</p>
-<h1 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h1><p><strong>静态方法</strong>：类锁,锁得是当前类的class对象<br><strong>普通方法</strong>：对象锁,锁得是当前实例对象<br><strong>同步代码块</strong>：锁得是括号里的对象</p>
-<p><strong>注：一个类只有一个class,可能有多个实例对象</strong>. 若一个类有多个静态方法，可能会造成性能影响。</p>
-<h1 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h1><h4 id="历史"><a href="#历史" class="headerlink" title="历史"></a><strong>历史</strong></h4><p>Synchronized在JDK1.6之前性能非常的低，使用的时候需要用户态与内核态的切换。<br>所以Doug li 写了AQS框架，实现了ReentranLock(java语言写的)，性能远远高于JVM自带的Syncronized。<br>之后甲骨文收购了java,觉得Syncronized干不过ReentranLock，为了颜面，在JDK1.6之后对Syncronized进行了优化，即锁的升级，目前Syncronized和ReentranLock的性能五五开。</p>
-<h4 id="升级过程"><a href="#升级过程" class="headerlink" title="升级过程"></a><strong>升级过程</strong></h4><p>锁得状态一共四种：无锁状态、偏向锁、轻量级锁、重量级锁。<br><strong>无锁状态</strong><br>当没有线程访问被syncronized修饰得方法或代码块时，就是无锁状态.</p>
-<p><strong>偏向锁</strong><br>当第一个线程访问syncronized修饰的方法或代码块时,锁就进入了偏向模式,此时JAVA对象头里的Mark Word的结构也变为偏向锁结构.当其他线程请求锁的时候，会CAS替换JAVA对象头里的Mark Word里偏向锁的信息，替换成功就获取到锁资源。记录在Mark Word的里的线程再次请求锁资源，不需要做任何同步操作，省去大量锁申请操作，也就提升了性能。</p>
-<p><strong>轻量级锁</strong><br>对于锁竞争激烈的场景，偏向锁就失效了。但是JVM并不会立刻升级为重量级锁,会先将Mark Word的结构变为轻量级锁的结构。轻量级锁适应的场景是线程交替执行代码块的场合，如果存在同一时间访问同一锁的场景，就会升级为重量级锁。</p>
-<p><strong>重量级锁</strong><br>在轻量级锁失败后，jvm会先进行自选锁的操作。会先让当前想获取锁的线程做空循环,经过一定次数的循环，如果还得不到锁，就只能升级为重量级锁。</p>
-<p><strong>注：锁得升级是不可逆的～</strong></p>
-<h1 id="加锁信息"><a href="#加锁信息" class="headerlink" title="加锁信息"></a>加锁信息</h1><p>锁信息展示（32位虚拟机）</p>
-<p><img src="https://github.com/geyou1995/picture/blob/master/syncronized.jpg?raw=true" alt=""></p>
+        <h1 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h1><p>最近项目中的几张表数据行超过了1000万行，所以需要对这些表进行水平分表，提高数据查询的性能。可选的方案有sharding-jdbc中间件还有就是Mybatis拦截器。由于个别表数据涉及了复杂的sql查询，可能会有意想不到的坑，所以决定采用Mybatis拦截器的方式。所以决定记录下来实现过程。</p>
+<h1 id="分表思路"><a href="#分表思路" class="headerlink" title="分表思路"></a>分表思路</h1><p>这里我需要分表的表名为process_log,这里不是根据正常的id字段去分表（因为这张表连id字段都没有…）,而是选择这张表的唯一字段form_data_code来作为分表字段，将form_data_code字段值进行hashCode()然后进行取模。目前这张表的数据足足5000多万，考虑之后还会增加，需要将表数据控制在百万级内，所以你决定分表20张。先来了解一下Mybatis拦截器…</p>
+<h1 id="Mybaits拦截器"><a href="#Mybaits拦截器" class="headerlink" title="Mybaits拦截器"></a>Mybaits拦截器</h1><h2 id="对四大接口进行拦截"><a href="#对四大接口进行拦截" class="headerlink" title="对四大接口进行拦截"></a>对四大接口进行拦截</h2><p><img src="https://github.com/geyou1995/picture/blob/master/mybatisIN.png?raw=true" alt=""></p>
+<p><strong>Executor</strong>:是mybatis的内部执行器，它通过调用StatementHandler来操作数据库<br><strong>StatementHandler</strong>:是mybatis直接和数据库执行sql脚本的对象<br><strong>ResultSetHandler</strong>:是mybaits把ResultSet集合映射成POJO的接口对象<br><strong>ParameterHandler</strong>:是mybatis实现sql入参设置的对象</p>
+<h2 id="Interceptor-接口"><a href="#Interceptor-接口" class="headerlink" title="Interceptor 接口"></a>Interceptor 接口</h2><p>mtbatis拦截器必须实现Interceptor接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Interceptor</span> </span>&#123;  </span><br><span class="line">  <span class="comment">// 拦截器执行的逻辑方法</span></span><br><span class="line">  <span class="function">Object <span class="title">intercept</span><span class="params">(Invocation invocation)</span> <span class="keyword">throws</span> Throwable</span>;  </span><br><span class="line">  <span class="comment">// 用来封装目标对象。可以返回目标对象本身也可以根据实际需要，创建一个代理对象</span></span><br><span class="line">  <span class="function">Object <span class="title">plugin</span><span class="params">(Object target)</span></span>;</span><br><span class="line">  <span class="comment">// 在Mybatis进行配置插件的时候可以配置自定义相关属性</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">setProperties</span><span class="params">(Properties properties)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @Intercepts注解参数数名</span></span><br><span class="line"><span class="comment">// Intercepts 拦截器: 标识我的类是一个拦截器</span></span><br><span class="line"><span class="comment">// Signature 署名: 则是指明我们的拦截器需要拦截哪一个接口的哪一个方法</span></span><br><span class="line"><span class="comment">//  type 对应四类接口中的某一个，比如是 StatementHandler</span></span><br><span class="line"><span class="comment">//  method 对应接口中的哪类方法，比如 StatementHandler 的 prepare 方法</span></span><br><span class="line"><span class="comment">//  args对应接口中的哪一个方法，方法参数</span></span><br><span class="line"><span class="meta">@Intercepts</span>(<span class="meta">@Signature</span>(type = StatementHandler.class,method = <span class="string">"prepare"</span>,args = &#123;Connection.class,Integer.class&#125;))</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShardTableInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>&#123;</span><br><span class="line">  <span class="comment">// todo </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实战实现"><a href="#实战实现" class="headerlink" title="实战实现"></a>实战实现</h3><p><strong>1.实现自定义注解</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SegmentTable &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 表名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">tableName</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 算法策略</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">Class <span class="title">strategyClazz</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 需要分表的table的Mapper接口</span></span><br><span class="line"><span class="meta">@SegmentTable</span>(tableName = <span class="string">"process_log"</span>, strategyClazz = ProcessLogStrategy.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ProcessLogMapper</span> </span>&#123;<span class="comment">// todo&#125;</span></span><br></pre></td></tr></table></figure>
+<p>2.<strong>使用策略模式实现算法</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ShardTableStrategy</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分表算法</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> statementHandler</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">String <span class="title">shardAlgorithm</span><span class="params">(StatementHandler statementHandler)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShardTableContext</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ShardTableStrategy tableStrategy;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShardTableContext</span><span class="params">(ShardTableStrategy tableStrategy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.tableStrategy = tableStrategy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">doShardAlgorithm</span><span class="params">(StatementHandler statementHandler)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> tableStrategy.shardAlgorithm(statementHandler);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// process_log表算法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProcessLogStrategy</span> <span class="keyword">implements</span> <span class="title">ShardTableStrategy</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(ProcessLogStrategy.class);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分表20张</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> Integer PROCESS_LOG_TABLE_NUM = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 特殊处理字段</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String PROCESS_LOG_TABLE_CONFIRM_INDEX = <span class="string">"subTableConfirmIndex"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分表字段</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String PROCESS_LOG_TABLE_SUB_FIELD = <span class="string">"formDataCode"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String PROCESS_LOG_BLANK_INDEX = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">shardAlgorithm</span><span class="params">(StatementHandler statementHandler)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (statementHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">            logger.error(<span class="string">"statementHandler is null"</span>);</span><br><span class="line">            <span class="keyword">return</span> PROCESS_LOG_BLANK_INDEX;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        BoundSql boundSql = statementHandler.getBoundSql();</span><br><span class="line">        Object parameterObject = boundSql.getParameterObject();</span><br><span class="line">        Map param2ValeMap = JSONObject.parseObject(JSON.toJSONString(parameterObject), Map.class);</span><br><span class="line">        <span class="keyword">if</span> (MapUtils.isEmpty(param2ValeMap)) &#123;</span><br><span class="line">            <span class="keyword">return</span> PROCESS_LOG_BLANK_INDEX;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 特殊处理foreach循环语句</span></span><br><span class="line">        Object confirmIndexValue = param2ValeMap.get(PROCESS_LOG_TABLE_CONFIRM_INDEX);</span><br><span class="line">        <span class="keyword">if</span> (confirmIndexValue != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> SHARD_TABLE_INDEX_LINE + confirmIndexValue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Object subFieldValue = param2ValeMap.get(PROCESS_LOG_TABLE_SUB_FIELD);</span><br><span class="line">        <span class="keyword">return</span> SHARD_TABLE_INDEX_LINE + Math.abs(subFieldValue.hashCode() % PROCESS_LOG_TABLE_NUM);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>3.拦截器intercept()执行逻辑</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Invocation invocation)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">       StatementHandler statementHandler = (StatementHandler) invocation.getTarget();</span><br><span class="line">       <span class="comment">// 全局操作读对象</span></span><br><span class="line">       MetaObject metaObject = MetaObject.forObject(statementHandler, SystemMetaObject.DEFAULT_OBJECT_FACTORY, SystemMetaObject.DEFAULT_OBJECT_WRAPPER_FACTORY, <span class="keyword">new</span> DefaultReflectorFactory());</span><br><span class="line">       <span class="comment">// @SegmentTable -- 只拦截有注解的Mapper</span></span><br><span class="line">       SegmentTable segmentTable = getSegmentTable(metaObject);</span><br><span class="line">       <span class="keyword">if</span> (segmentTable == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">return</span> invocation.proceed();</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 1.对value进行算法 -&gt; 确定表名</span></span><br><span class="line">       Class strategyClazz = segmentTable.strategyClazz();</span><br><span class="line">       ShardTableStrategy strategy = (ShardTableStrategy) strategyClazz.newInstance();</span><br><span class="line">       String index = <span class="keyword">new</span> ShardTableContext(strategy).doShardAlgorithm(statementHandler);</span><br><span class="line"></span><br><span class="line">       logger.info(<span class="string">"ShardTableInterceptor segmentTable=&#123;&#125;,index=&#123;&#125;"</span>, JSON.toJSONString(segmentTable), index);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 2.替换表名</span></span><br><span class="line">       <span class="comment">// 获取原始sql</span></span><br><span class="line">       String tableName = segmentTable.tableName();</span><br><span class="line">       String sql = (String) metaObject.getValue(BOUND_SQL_NAME);</span><br><span class="line">       metaObject.setValue(BOUND_SQL_NAME, sql.replaceFirst(tableName, tableName + index));</span><br><span class="line">       <span class="keyword">return</span> invocation.proceed();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结遇到的问题"><a href="#总结遇到的问题" class="headerlink" title="总结遇到的问题"></a>总结遇到的问题</h1><p>1.分页插件pagehelper导致自定义插件无效<br>项目系统里也用了mybatis的分页插件pagehelper,pagehelper的intercept方法中没有invocation.proceed()，所以导致自定义的拦截器失效，没有传递下去。所以需要调整注册顺序。– 参考<br><a href="http://xtong.tech/2018/08/01/MyBatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%9B%A0pagehelper%E8%80%8C%E5%A4%B1%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" target="_blank" rel="noopener">http://xtong.tech/2018/08/01/MyBatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%9B%A0pagehelper%E8%80%8C%E5%A4%B1%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/</a></p>
+<p>2.迁移老数据<br>分表首先要做的就是老数据的迁移，由于这里是根据Java的hashcode()计算关键字段，数据库的函数也要同一种hash算法，这里用的数据库是postgreSql,里面提供了一些hash算法但是和java的不同，因为要用阿里的DataWorks迁移，经过调研，Pg可以提供自定义算法，所以可以创建于JAVA hashCode()相同的自定义算法，这样就可以保证数据的迁移。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 自定义java hashCode算法</span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span>  hash_code(<span class="built_in">text</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> hash_code(<span class="built_in">text</span>) <span class="keyword">RETURNS</span> <span class="built_in">integer</span></span><br><span class="line">    <span class="keyword">LANGUAGE</span> plpgsql</span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line">$$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    i <span class="built_in">integer</span> := <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">DECLARE</span></span><br><span class="line">    h <span class="built_in">bigint</span>  := <span class="number">0</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">FOR</span> i <span class="keyword">IN</span> <span class="number">1.</span>.length($<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">LOOP</span></span><br><span class="line">            h = (h * <span class="number">31</span> + <span class="keyword">ascii</span>(<span class="keyword">substring</span>($<span class="number">1</span>, i, <span class="number">1</span>))) &amp; <span class="number">4294967295</span>;</span><br><span class="line">        <span class="keyword">END</span> <span class="keyword">LOOP</span>;</span><br><span class="line">    RETURN cast(cast(h AS bit(32)) AS int4);</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -425,8 +432,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/08/15/Volatile关键字/" rel="next" title="volatile关键字">
-                <i class="fa fa-chevron-left"></i> volatile关键字
+              <a href="/2020/09/19/设计模式-策略模式/" rel="next" title="设计模式之策略模式">
+                <i class="fa fa-chevron-left"></i> 设计模式之策略模式
               </a>
             
           </div>
@@ -434,10 +441,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/08/22/类加载器与双亲委派机制/" rel="prev" title="类加载器和双亲委派机制">
-                类加载器和双亲委派机制 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -587,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用法"><span class="nav-number">2.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁升级"><span class="nav-number">3.</span> <span class="nav-text">锁升级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#历史"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">历史</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#升级过程"><span class="nav-number">3.0.0.2.</span> <span class="nav-text">升级过程</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加锁信息"><span class="nav-number">4.</span> <span class="nav-text">加锁信息</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#需求背景"><span class="nav-number">1.</span> <span class="nav-text">需求背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分表思路"><span class="nav-number">2.</span> <span class="nav-text">分表思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mybaits拦截器"><span class="nav-number">3.</span> <span class="nav-text">Mybaits拦截器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对四大接口进行拦截"><span class="nav-number">3.1.</span> <span class="nav-text">对四大接口进行拦截</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interceptor-接口"><span class="nav-number">3.2.</span> <span class="nav-text">Interceptor 接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实战实现"><span class="nav-number">3.2.1.</span> <span class="nav-text">实战实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结遇到的问题"><span class="nav-number">4.</span> <span class="nav-text">总结遇到的问题</span></a></li></ol></div>
             
 
           </div>
