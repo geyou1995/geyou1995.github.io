@@ -81,20 +81,16 @@
 
 
 
-<meta name="description" content="类的加载过程加载在硬盘上查找通过I/O读取字节码文件,生成类的二进制数据（.class文件） 验证校验生成的字节码文件的正确性 准备给类的静态变量分配内存,并赋予默认值 解析符号引用转化为直接引用 初始化对类的静态变量初始化为指定的值,执行静态代码块  注：类被加载到方法区中主要包含 运行时常量、类型信息、字段信息、方法信息、类加载器的引用（这个类到类加载器实例等引用）、对应classs实例的引用">
-<meta property="og:type" content="article">
-<meta property="og:title" content="类加载器和双亲委派机制">
-<meta property="og:url" content="http://yoursite.com/2020/08/22/类加载器与双亲委派机制/index.html">
+<meta name="description" content="随心所欲 前往任何地方">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我就是胖着玩玩的">
+<meta property="og:url" content="http://yoursite.com/archives/2020/11/index.html">
 <meta property="og:site_name" content="我就是胖着玩玩的">
-<meta property="og:description" content="类的加载过程加载在硬盘上查找通过I/O读取字节码文件,生成类的二进制数据（.class文件） 验证校验生成的字节码文件的正确性 准备给类的静态变量分配内存,并赋予默认值 解析符号引用转化为直接引用 初始化对类的静态变量初始化为指定的值,执行静态代码块  注：类被加载到方法区中主要包含 运行时常量、类型信息、字段信息、方法信息、类加载器的引用（这个类到类加载器实例等引用）、对应classs实例的引用">
+<meta property="og:description" content="随心所欲 前往任何地方">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/jvm.png?raw=true">
-<meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/ljzq.png?raw=true">
-<meta property="og:updated_time" content="2020-08-23T02:43:17.972Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="类加载器和双亲委派机制">
-<meta name="twitter:description" content="类的加载过程加载在硬盘上查找通过I/O读取字节码文件,生成类的二进制数据（.class文件） 验证校验生成的字节码文件的正确性 准备给类的静态变量分配内存,并赋予默认值 解析符号引用转化为直接引用 初始化对类的静态变量初始化为指定的值,执行静态代码块  注：类被加载到方法区中主要包含 运行时常量、类型信息、字段信息、方法信息、类加载器的引用（这个类到类加载器实例等引用）、对应classs实例的引用">
-<meta name="twitter:image" content="https://github.com/geyou1995/picture/blob/master/jvm.png?raw=true">
+<meta name="twitter:title" content="我就是胖着玩玩的">
+<meta name="twitter:description" content="随心所欲 前往任何地方">
 
 
 
@@ -124,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/08/22/类加载器与双亲委派机制/"/>
+  <link rel="canonical" href="http://yoursite.com/archives/2020/11/"/>
 
 
 
 
 
-  <title>类加载器和双亲委派机制 | 我就是胖着玩玩的</title>
+  <title>归档 | 我就是胖着玩玩的</title>
   
 
 
@@ -149,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left page-archive">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -277,202 +273,74 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block archive">
+    <div id="posts" class="posts-collapse">
+      <span class="archive-move-on"></span>
 
-  
+      <span class="archive-page-counter">
+        
+        
+        
+          
+        
+        嗯..! 目前共计 26 篇日志。 继续努力。
+      </span>
 
-  
-  
-  
+      
+
+        
+        
+        
+
+        
+          
+          <div class="collection-title">
+            <h1 class="archive-year" id="archive-year-2020">2020</h1>
+          </div>
+        
+        
+
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/22/类加载器与双亲委派机制/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Youga">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar2.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我就是胖着玩玩的">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2020/11/06/后端必备linuk操作命令/" itemprop="url">
+              
+                <span itemprop="name">后端必备linuk操作命令</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">类加载器和双亲委派机制</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-22T15:52:55+08:00">
-                2020-08-22
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2020-11-06T21:01:55+08:00"
+              content="2020-11-06" >
+          11-06
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVM/" itemprop="url" rel="index">
-                    <span itemprop="name">JVM</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/08/22/类加载器与双亲委派机制/" class="leancloud_visitors" data-flag-title="类加载器和双亲委派机制">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h1 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h1><p><strong>加载</strong><br>在硬盘上查找通过I/O读取字节码文件,生成类的二进制数据（.class文件）</p>
-<p><strong>验证</strong><br>校验生成的字节码文件的正确性</p>
-<p><strong>准备</strong><br>给类的静态变量分配内存,并赋予默认值</p>
-<p><strong>解析</strong><br>符号引用转化为直接引用</p>
-<p><strong>初始化</strong><br>对类的静态变量初始化为指定的值,执行静态代码块</p>
-<p><img src="https://github.com/geyou1995/picture/blob/master/jvm.png?raw=true" alt=""></p>
-<p>注：类被加载到方法区中主要包含 <strong>运行时常量、类型信息、字段信息、方法信息、类加载器的引用（这个类到类加载器实例等引用）、对应classs实例的引用（类加载器在加载类信息放到方法区后，会创建一个对应的class类型的对象放到堆中）</strong>等信息.<br>还有主类运行过程中，如果使用到其他类，会逐步加载这些类。jar包和war包里的类都是懒加载。</p>
-<h1 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h1><p><strong>引导类加载器(BootStrapClassLoader)</strong><br>负责加载支撑JVM运行的位于JRE的lib目录下的核心类库,比如rt.jar、charsets.jar等</p>
-<p><strong>扩展类加载器(ExtClassLoader)</strong><br>负责加载支撑JVM运行的位于JRE的lib目录下的ext扩展目录中的jar类包</p>
-<p><strong>应用程序加载器(AppClassLoader)</strong><br>负载加载ClassPath路径下的类包,主要加载你自己写的那些类</p>
-<p><strong>自定义类加载器</strong><br>负责加载用户自定义路径下的类包</p>
-<p>如下代码分别输出BootStrapClassLoader、ExtClassLoader、AppClassLoader.<br>由于引导类加载器是C语言写的所以返回null。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(String.class.getClassLoader());     System.out.println(com.sun.crypto.provider.DESKeyFactory.class.getClassLoader().getClass().getName());</span><br><span class="line">System.out.println(TestJDKClassLoader.class.getClassLoader().getClass().getName());</span><br><span class="line">--------------------------------------------</span><br><span class="line"><span class="keyword">null</span></span><br><span class="line">sun.misc.Launcher$ExtClassLoader</span><br><span class="line">sun.misc.Launcher$AppClassLoader</span><br></pre></td></tr></table></figure>
-<p>类加载器之间关系</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> ClassLoader appClassLoader = ClassLoader.getSystemClassLoader();</span><br><span class="line"> ClassLoader extClassloader = appClassLoader.getParent();</span><br><span class="line"> ClassLoader bootstrapLoader = extClassloader.getParent();</span><br><span class="line">System.out.println(<span class="string">"the bootstrapLoader : "</span> + bootstrapLoader);</span><br><span class="line">System.out.println(<span class="string">"the extClassloader : "</span> + extClassloader);</span><br><span class="line">System.out.println(<span class="string">"the appClassLoader : "</span> + appClassLoader);</span><br><span class="line"></span><br><span class="line">---------------------------------------------------------</span><br><span class="line">the bootstrapLoader : <span class="keyword">null</span></span><br><span class="line">the extClassloader : sun.misc.Launcher$ExtClassLoader@<span class="number">776</span>ec8df</span><br><span class="line">the appClassLoader : sun.misc.Launcher$AppClassLoader@<span class="number">18</span>b4aac2</span><br></pre></td></tr></table></figure>
-<p>如上代码可以看出JVM类加载器是有亲子层级结构的<br><strong>BootStrapClassLoader -&gt; ExtClassLoader -&gt; AppClassLoader -&gt; 自定义类加载器</strong></p>
-<h1 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h1><p><img src="https://github.com/geyou1995/picture/blob/master/ljzq.png?raw=true" alt=""></p>
-<p>如果一个类加载器收到类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委托给自己的父类去完成，一次向上。只有当父类无法完成该加载时，子加载器才会尝试自己去加载该类。<br>这就是类加载的<strong>双亲委派机制</strong>：<strong>先找父亲加载，不行再由儿子自己加载</strong></p>
-<h3 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h3><p>假设现在要加载Math类，最先会找AppClassLoader加载，AppClassLoader会委托ExtClassLoader加载，ExtClassLoader则又会委托BootStrapClassLoader加载，BootStrapClassLoader是顶层引导类加载器，则会在自己的类加载路径里找Math类，没有则退回BootStrapClassLoader，BootStrapClassLoader则会在自己的类加载路径里找Math类，也没有则最后退回到AppClassLoader类加载，最终在AppClassLoader的加载路径里找到Math类，最后就自己加载了。</p>
-<h3 id="为什么要设计双亲委派机制？"><a href="#为什么要设计双亲委派机制？" class="headerlink" title="为什么要设计双亲委派机制？"></a>为什么要设计双亲委派机制？</h3><p><strong>沙箱安全机制</strong><br>这样可以防止核心类被篡改,比如rt.jar里有一个常用的java.lang.String.class类，这样你自己写的相同路径的java.lang.String.class类就不会被加载。</p>
-<p><strong>避免类的重复加载</strong><br>当父亲已经加载过的类路径，子类就没有必要再去加载一次,保证被加载类的唯一性。</p>
-<h3 id="全盘委托机制"><a href="#全盘委托机制" class="headerlink" title="全盘委托机制"></a>全盘委托机制</h3><p>如果一个类加载，这个类依赖的其他类，也会一起加载。</p>
-<h1 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h1><p>自定义类加载器需要继承 java.lang.ClassLoader 类,这个类有两个核心方法，<br>loadClass(String, boolean)，实现了<strong>双亲委派机制</strong>。<br>findClass，默认实现是空方法，所以我们自定义类加载器主要是<strong>重写</strong>findClass<strong>方法</strong>。<br>自定义类加载器默认父加载器是AppClassLoader。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Class&lt;?&gt; loadClass(String var1, <span class="keyword">boolean</span> var2) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">           <span class="keyword">int</span> var3 = var1.lastIndexOf(<span class="number">46</span>);</span><br><span class="line">           <span class="keyword">if</span> (var3 != -<span class="number">1</span>) &#123;</span><br><span class="line">               SecurityManager var4 = System.getSecurityManager();</span><br><span class="line">               <span class="keyword">if</span> (var4 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                   var4.checkPackageAccess(var1.substring(<span class="number">0</span>, var3));</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (<span class="keyword">this</span>.ucp.knownToNotExist(var1)) &#123;</span><br><span class="line">               Class var5 = <span class="keyword">this</span>.findLoadedClass(var1);</span><br><span class="line">               <span class="keyword">if</span> (var5 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (var2) &#123;</span><br><span class="line">                       <span class="keyword">this</span>.resolveClass(var5);</span><br><span class="line">                   &#125;</span><br><span class="line"></span><br><span class="line">                   <span class="keyword">return</span> var5;</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(var1);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">super</span>.loadClass(var1, var2);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; findClass(<span class="keyword">final</span> String name)</span><br><span class="line">       <span class="keyword">throws</span> ClassNotFoundException</span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">final</span> Class&lt;?&gt; result;</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           result = AccessController.doPrivileged(</span><br><span class="line">               <span class="keyword">new</span> PrivilegedExceptionAction&lt;Class&lt;?&gt;&gt;() &#123;</span><br><span class="line">                   <span class="keyword">public</span> Class&lt;?&gt; run() <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">                       String path = name.replace(<span class="string">'.'</span>, <span class="string">'/'</span>).concat(<span class="string">".class"</span>);</span><br><span class="line">                       Resource res = ucp.getResource(path, <span class="keyword">false</span>);</span><br><span class="line">                       <span class="keyword">if</span> (res != <span class="keyword">null</span>) &#123;</span><br><span class="line">                           <span class="keyword">try</span> &#123;</span><br><span class="line">                               <span class="keyword">return</span> defineClass(name, res);</span><br><span class="line">                           &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                               <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(name, e);</span><br><span class="line">                           &#125;</span><br><span class="line">                       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                           <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;, acc);</span><br><span class="line">       &#125; <span class="keyword">catch</span> (java.security.PrivilegedActionException pae) &#123;</span><br><span class="line">           <span class="keyword">throw</span> (ClassNotFoundException) pae.getException();</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> (result == <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(name);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> result;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2020/08/15/Synchronized关键字/" rel="next" title="Syncronized关键字">
-                <i class="fa fa-chevron-left"></i> Syncronized关键字
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/08/29/设计模式-构建者模式/" rel="prev" title="设计模式-构建者模式">
-                设计模式-构建者模式 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
       
+
     </div>
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -480,10 +348,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -504,17 +368,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -592,22 +447,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类的加载过程"><span class="nav-number">1.</span> <span class="nav-text">类的加载过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类加载器"><span class="nav-number">2.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#双亲委派机制"><span class="nav-number">3.</span> <span class="nav-text">双亲委派机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#举例"><span class="nav-number">3.0.1.</span> <span class="nav-text">举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要设计双亲委派机制？"><span class="nav-number">3.0.2.</span> <span class="nav-text">为什么要设计双亲委派机制？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全盘委托机制"><span class="nav-number">3.0.3.</span> <span class="nav-text">全盘委托机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义类加载器"><span class="nav-number">4.</span> <span class="nav-text">自定义类加载器</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
       
 
@@ -748,10 +587,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
