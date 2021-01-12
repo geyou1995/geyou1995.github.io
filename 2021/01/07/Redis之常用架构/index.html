@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="我就是胖着玩玩的" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Redis哨兵高可用架构1.sentinel哨兵是特殊的redis服务，不提供读写服务，主要用来监控redis实例节点。2.一个sentinel哨兵也是一个redis实例.3.哨兵架构下client端第一次从哨兵找出redis的主节点，后续就直接访问redis的主节点，不会每次都通过 sentinel代理访问redis的主节点，当redis的主节点发生变化，哨兵会第一时间感知到，并且将新的redi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis之常用架构">
+<meta property="og:url" content="http://yoursite.com/2021/01/07/Redis之常用架构/index.html">
+<meta property="og:site_name" content="我就是胖着玩玩的">
+<meta property="og:description" content="Redis哨兵高可用架构1.sentinel哨兵是特殊的redis服务，不提供读写服务，主要用来监控redis实例节点。2.一个sentinel哨兵也是一个redis实例.3.哨兵架构下client端第一次从哨兵找出redis的主节点，后续就直接访问redis的主节点，不会每次都通过 sentinel代理访问redis的主节点，当redis的主节点发生变化，哨兵会第一时间感知到，并且将新的redi">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/redis-11.png?raw=true">
+<meta property="og:image" content="https://github.com/geyou1995/picture/blob/master/redis-12.png?raw=true">
+<meta property="og:updated_time" content="2021-01-12T13:19:07.308Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis之常用架构">
+<meta name="twitter:description" content="Redis哨兵高可用架构1.sentinel哨兵是特殊的redis服务，不提供读写服务，主要用来监控redis实例节点。2.一个sentinel哨兵也是一个redis实例.3.哨兵架构下client端第一次从哨兵找出redis的主节点，后续就直接访问redis的主节点，不会每次都通过 sentinel代理访问redis的主节点，当redis的主节点发生变化，哨兵会第一时间感知到，并且将新的redi">
+<meta name="twitter:image" content="https://github.com/geyou1995/picture/blob/master/redis-11.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/01/07/Redis之常用架构/"/>
+
+
+
+
+
+  <title>Redis之常用架构 | 我就是胖着玩玩的</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我就是胖着玩玩的</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">坚持产生意外✊</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/07/Redis之常用架构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Youga">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我就是胖着玩玩的">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis之常用架构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-07T14:49:58+08:00">
+                2021-01-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2021/01/07/Redis之常用架构/" class="leancloud_visitors" data-flag-title="Redis之常用架构">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Redis哨兵高可用架构"><a href="#Redis哨兵高可用架构" class="headerlink" title="Redis哨兵高可用架构"></a>Redis哨兵高可用架构</h1><p>1.sentinel哨兵是特殊的redis服务，不提供读写服务，主要用来监控redis实例节点。<br>2.一个sentinel哨兵也是一个redis实例.<br>3.哨兵架构下client端第一次从哨兵找出redis的主节点，后续就直接访问redis的主节点，不会每次都通过 sentinel代理访问redis的主节点，当redis的主节点发生变化，哨兵会第一时间感知到，并且将新的redis主节点通知给client端(这里面redis的client端一般都实现了订阅功能，订阅sentinel发布的节点变动消息)</p>
+<p><img src="https://github.com/geyou1995/picture/blob/master/redis-11.png?raw=true" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redir哨兵架构搭建步骤</span></span><br><span class="line"><span class="number">1</span>.复制一份sentinel.conf文件</span><br><span class="line"><span class="number">2</span>.将相关配置修改为如下值</span><br><span class="line">  port <span class="number">26379</span></span><br><span class="line">  daemonize yes</span><br><span class="line">  pidfile <span class="string">"/var/run/redis‐sentinel‐26379.pid"</span></span><br><span class="line">  logfile <span class="string">"26379.log"</span></span><br><span class="line">  dir <span class="string">"/usr/local/redis‐5.0.3/data"</span></span><br><span class="line">  sentinel monitor mymaster <span class="number">127.0</span>.0.1 <span class="number">6379</span> <span class="number">2</span> --指定主节点ip,端口 <span class="number">2</span>-代表指明当有多少个sentinel认为一个master失效时才失效</span><br><span class="line"> <span class="number">3</span>.启动sentinel哨兵实例</span><br><span class="line">  src/redis‐sentinel sentinel‐<span class="number">26379</span>.conf</span><br><span class="line"> <span class="number">4</span>.查看sentinel的info信息,可以看到Sentinel的info里已经识别出了redis的主从信息</span><br><span class="line">  ...</span><br><span class="line">  # Sentinel</span><br><span class="line">	sentinel_masters:<span class="number">1</span></span><br><span class="line">	sentinel_tilt:<span class="number">0</span></span><br><span class="line">	sentinel_running_scripts:<span class="number">0</span></span><br><span class="line">	sentinel_scripts_queue_length:<span class="number">0</span></span><br><span class="line">	sentinel_simulate_failure_flags:<span class="number">0</span></span><br><span class="line">	master0:name=mymaster,status=ok,address=<span class="number">127.0</span>.0.1:<span class="number">6379</span>,slaves=<span class="number">2</span>,sentinels=<span class="number">3</span></span><br><span class="line"> </span><br><span class="line"> <span class="comment">// 类似的可以多配几个哨兵</span></span><br></pre></td></tr></table></figure>
+<p><strong>哨兵选举流程</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">当一个master服务器被sentinel看作下线状态后,该sentinel会与其他哨兵协商选出烧饼的leader进行故障转移工作.</span><br><span class="line"><span class="number">1</span>.每个发现master下线的哨兵都可以要求其他哨兵选自己为哨兵的leader,选举先到先得.</span><br><span class="line"><span class="number">2</span>.同时每个哨兵每次选举都会自增配置纪元（选举周期）,每个纪元只会选择一个sentine的leader.</span><br><span class="line"><span class="number">3</span>.如果超过一半的哨兵选举某个哨兵为leader，这个哨兵就会进行故障转移操作,从存活的slave中选举新的master.整个过程类似集群选举.</span><br><span class="line"><span class="comment">// 如果哨兵集群只有一个哨兵,如果master挂了，这个哨兵自动成为leader，已可以正常选举。</span></span><br><span class="line">但是为了高可用,一半推荐至少部署三个哨兵节点</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 哨兵模式的缺陷</span></span><br><span class="line"><span class="number">1</span>.如果master节点异常，则会做主从切换，将某一台slave作为master，哨兵的配置略微复杂，并且性能和高可用性等各方面表现一般.</span><br><span class="line"><span class="number">2</span>.在主从切换的瞬间存在访问瞬断的情况，而且哨兵模式只有一个主节点对外提供服务，没法支持很高的并发.</span><br><span class="line"><span class="number">3</span>.单个主节点内存也不宜设置得过大，否则会导致持久化文件过大，影响数据恢复或主从同步的效率.</span><br></pre></td></tr></table></figure>
+<h1 id="Redis高可用集群架构"><a href="#Redis高可用集群架构" class="headerlink" title="Redis高可用集群架构"></a>Redis高可用集群架构</h1><p>Redis3.0以后的版本虽然有了集群功能，提供了比以前版本的哨兵模式更高的性能和可用性，但是集群的水平扩展却比较麻烦，这里来搭建Redis集群,6个节点，采用三主三从的模式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 集群模式的数据是分片存放的，各个节点的数据都不同.水平扩展可以10000个，官方推荐不要超过1000.</span></span><br><span class="line"><span class="comment">// 至少三个主节点,从节点不支持读写，从节点的功能就是数据备份.</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://github.com/geyou1995/picture/blob/master/redis-12.png?raw=true" alt=""></p>
+<h2 id="开始搭建"><a href="#开始搭建" class="headerlink" title="开始搭建"></a>开始搭建</h2><p><strong>准备配置文件</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里是单机启动多个节点</span></span><br><span class="line"><span class="number">1</span>.创建三个目录,每个目录下配置两个节点,<span class="number">8001</span>，<span class="number">8002</span>;<span class="number">8003</span>，<span class="number">8006</span>；<span class="number">8007</span>，<span class="number">8008</span>分别三组<span class="number">6</span>个实例.</span><br><span class="line"><span class="number">2</span>.修改对应的配置文件，以<span class="number">8001</span>为例</span><br><span class="line">	daemonize yes -- 是否用守护线程启动</span><br><span class="line">	port <span class="number">8001</span> -- 对应端口号</span><br><span class="line">	dir ./ --指定数据存放位置</span><br><span class="line">  cluster-enabled yes --启动集群模式</span><br><span class="line">  cluster-config-file nodes-<span class="number">8001</span>.conf --集群节点信息，这里<span class="number">800</span>x与port对应上</span><br><span class="line">  cluster-node-timeout <span class="number">5000</span> --超时时间</span><br><span class="line">  <span class="keyword">protected</span>-node no -- 关闭保护模式</span><br><span class="line">  appendonly yes </span><br><span class="line">  </span><br><span class="line">  requirepass gy -- 设置redis访问密码</span><br><span class="line">  masterauth gy -- 设置集群节点间访问密码</span><br></pre></td></tr></table></figure>
+<p><strong>启动集群</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">guMacBook-Pro:redis geyou$ src/redis-server redis-cluster1/<span class="number">8007</span>/redis.conf </span><br><span class="line">guMacBook-Pro:redis geyou$ src/redis-server redis-cluster1/<span class="number">8008</span>/redis.conf </span><br><span class="line">guMacBook-Pro:redis geyou$ src/redis-server redis-cluster2/<span class="number">8001</span>/redis.conf </span><br><span class="line">guMacBook-Pro:redis geyou$ src/redis-server redis-cluster2/<span class="number">8002</span>/redis.conf </span><br><span class="line">guMacBook-Pro:redis geyou$ src/redis-server redis-cluster3/<span class="number">8003</span>/redis.conf </span><br><span class="line">guMacBook-Pro:redis geyou$ src/redis-server redis-cluster3/<span class="number">8006</span>/redis.conf </span><br><span class="line">-----</span><br><span class="line">  <span class="number">501</span> <span class="number">49031</span>     <span class="number">1</span>   <span class="number">0</span>  <span class="number">1</span>:<span class="number">54</span>下午 ??         <span class="number">0</span>:<span class="number">00.16</span> src/redis-server <span class="number">127.0</span>.0.1:<span class="number">8007</span> [cluster] </span><br><span class="line">  <span class="number">501</span> <span class="number">49035</span>     <span class="number">1</span>   <span class="number">0</span>  <span class="number">1</span>:<span class="number">55</span>下午 ??         <span class="number">0</span>:<span class="number">00.11</span> src/redis-server <span class="number">127.0</span>.0.1:<span class="number">8008</span> [cluster] </span><br><span class="line">  <span class="number">501</span> <span class="number">49037</span>     <span class="number">1</span>   <span class="number">0</span>  <span class="number">1</span>:<span class="number">55</span>下午 ??         <span class="number">0</span>:<span class="number">00.08</span> src/redis-server <span class="number">127.0</span>.0.1:<span class="number">8001</span> [cluster] </span><br><span class="line">  <span class="number">501</span> <span class="number">49039</span>     <span class="number">1</span>   <span class="number">0</span>  <span class="number">1</span>:<span class="number">55</span>下午 ??         <span class="number">0</span>:<span class="number">00.07</span> src/redis-server <span class="number">127.0</span>.0.1:<span class="number">8002</span> [cluster] </span><br><span class="line">  <span class="number">501</span> <span class="number">49042</span>     <span class="number">1</span>   <span class="number">0</span>  <span class="number">1</span>:<span class="number">55</span>下午 ??         <span class="number">0</span>:<span class="number">00.03</span> src/redis-server <span class="number">127.0</span>.0.1:<span class="number">8003</span> [cluster] </span><br><span class="line">  <span class="number">501</span> <span class="number">49044</span>     <span class="number">1</span>   <span class="number">0</span>  <span class="number">1</span>:<span class="number">55</span>下午 ??         <span class="number">0</span>:<span class="number">00.02</span> src/redis-server <span class="number">127.0</span>.0.1:<span class="number">8006</span> [cluster]</span><br></pre></td></tr></table></figure>
+<p><strong>组成集群</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上述还只是6个游离的实例，还未组成集群</span></span><br><span class="line"><span class="comment">// 查看帮助文档</span></span><br><span class="line">src/redis-cli --cluster help</span><br><span class="line">----</span><br><span class="line">create：创建一个集群环境host1:port1 ... hostN:portN </span><br><span class="line">call：可以执行redis命令</span><br><span class="line">add-node：将一个节点添加到集群里，第一个参数为新节点的ip:port，第二个参数为集群中任意一个已经存在的节点的						ip:port</span><br><span class="line">el-node：移除一个节点</span><br><span class="line">reshard：重新分片</span><br><span class="line">check：检查集群状态</span><br><span class="line"><span class="comment">// 创建集群命令</span></span><br><span class="line">redis-cli -a gy --cluster create --cluster-replicas <span class="number">1</span> <span class="number">127.0</span>.0.1:<span class="number">8001</span> <span class="number">127.0</span>.0.1:<span class="number">8002</span> <span class="number">127.0</span>.0.1:<span class="number">8003</span> <span class="number">127.0</span>.0.1:<span class="number">8004</span> <span class="number">127.0</span>.0.1:<span class="number">8005</span> <span class="number">127.0</span>.0.1:<span class="number">8006</span></span><br><span class="line"><span class="comment">// 成功配置信息</span></span><br><span class="line">&gt;&gt;&gt; <span class="function">Performing Cluster <span class="title">Check</span> <span class="params">(using node <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8001</span>)</span></span></span><br><span class="line"><span class="function">M: a8fa9d463a15a5ccb373486409305f5256b2fe0c 127.0.0.1:8001</span></span><br><span class="line"><span class="function">   slots:[0-5460] <span class="params">(<span class="number">5461</span> slots)</span> master</span></span><br><span class="line"><span class="function">   1 additional <span class="title">replica</span><span class="params">(s)</span></span></span><br><span class="line"><span class="function">M: 11ba9f200e7f329df31d2eda0091385a98a5686d 127.0.0.1:8002</span></span><br><span class="line"><span class="function">   slots:[5461-10922] <span class="params">(<span class="number">5462</span> slots)</span> master</span></span><br><span class="line"><span class="function">   1 additional <span class="title">replica</span><span class="params">(s)</span></span></span><br><span class="line"><span class="function">S: 7cd6975e6296a1d5d4bcdea32a4622e4680975b0 127.0.0.1:8005</span></span><br><span class="line"><span class="function">   slots: <span class="params">(<span class="number">0</span> slots)</span> slave</span></span><br><span class="line"><span class="function">   replicates 11ba9f200e7f329df31d2eda0091385a98a5686d</span></span><br><span class="line"><span class="function">M: 5ed4654c5ea47c965930df7700374780450f33e4 127.0.0.1:8003</span></span><br><span class="line"><span class="function">   slots:[10923-16383] <span class="params">(<span class="number">5461</span> slots)</span> master</span></span><br><span class="line"><span class="function">   1 additional <span class="title">replica</span><span class="params">(s)</span></span></span><br><span class="line"><span class="function">S: 875204f61ecf81f12d11e1d5884f7bce51165d53 127.0.0.1:8006</span></span><br><span class="line"><span class="function">   slots: <span class="params">(<span class="number">0</span> slots)</span> slave</span></span><br><span class="line"><span class="function">   replicates 5ed4654c5ea47c965930df7700374780450f33e4</span></span><br><span class="line"><span class="function">S: ba204ce87c14334bdc06629320eda3eddc40cd78 127.0.0.1:8004</span></span><br><span class="line"><span class="function">   slots: <span class="params">(<span class="number">0</span> slots)</span> slave</span></span><br><span class="line"><span class="function">   replicates a8fa9d463a15a5ccb373486409305f5256b2fe0c</span></span><br><span class="line"><span class="function">[OK] All nodes agree about slots configuration.</span></span><br><span class="line"><span class="function">&gt;&gt;&gt; Check <span class="keyword">for</span> open slots...</span></span><br><span class="line"><span class="function">&gt;&gt;&gt; Check slots coverage...</span></span><br><span class="line"><span class="function">[OK] All 16384 slots covered.</span></span><br></pre></td></tr></table></figure>
+<p><strong>查看集群信息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 进入一台redis客户端:src/redis-cli -a gy -c -h 127.0.0.1 -p 8001</span></span><br><span class="line"><span class="number">11</span>ba9f200e7f329df31d2eda0091385a98a5686d <span class="number">127.0</span>.0.1:<span class="number">8002</span>@<span class="number">18002</span> master - <span class="number">0</span> <span class="number">1609571581446</span> <span class="number">2</span> connected <span class="number">5461</span>-<span class="number">10922</span></span><br><span class="line">a8fa9d463a15a5ccb373486409305f5256b2fe0c <span class="number">127.0</span>.0.1:<span class="number">8001</span>@<span class="number">18001</span> myself,master - <span class="number">0</span> <span class="number">1609571579000</span> <span class="number">1</span> connected <span class="number">0</span>-<span class="number">5460</span></span><br><span class="line"><span class="number">7</span>cd6975e6296a1d5d4bcdea32a4622e4680975b0 <span class="number">127.0</span>.0.1:<span class="number">8005</span>@<span class="number">18005</span> slave <span class="number">11</span>ba9f200e7f329df31d2eda0091385a98a5686d <span class="number">0</span> <span class="number">1609571580540</span> <span class="number">2</span> connected</span><br><span class="line"><span class="number">5</span>ed4654c5ea47c965930df7700374780450f33e4 <span class="number">127.0</span>.0.1:<span class="number">8003</span>@<span class="number">18003</span> master - <span class="number">0</span> <span class="number">1609571580000</span> <span class="number">3</span> connected <span class="number">10923</span>-<span class="number">16383</span></span><br><span class="line"><span class="number">875204f</span>61ecf81f12d11e1d5884f7bce51165d53 <span class="number">127.0</span>.0.1:<span class="number">8006</span>@<span class="number">18006</span> slave <span class="number">5</span>ed4654c5ea47c965930df7700374780450f33e4 <span class="number">0</span> <span class="number">1609571581000</span> <span class="number">3</span> connected</span><br><span class="line">ba204ce87c14334bdc06629320eda3eddc40cd78 <span class="number">127.0</span>.0.1:<span class="number">8004</span>@<span class="number">18004</span> slave a8fa9d463a15a5ccb373486409305f5256b2fe0c <span class="number">0</span> <span class="number">1609571581546</span> <span class="number">1</span> connected</span><br></pre></td></tr></table></figure>
+<p><strong>关闭集群</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 关闭需要逐个进行关闭，使用命令</span></span><br><span class="line">src/redis-cli -a gy -c -h <span class="number">127.0</span>.0.1 -p <span class="number">800</span>* shutdown</span><br></pre></td></tr></table></figure>
+<h2 id="Redis集群原理分析"><a href="#Redis集群原理分析" class="headerlink" title="Redis集群原理分析"></a>Redis集群原理分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.RedisCluster将所有数据划分为<span class="number">16384</span>个slots（槽位）,每个节点负责其中一部分槽位.槽位的信息存储于每个节点中.</span><br><span class="line"><span class="number">2</span>.当Redis Cluster的客户端来连接集群时，它也会得到一份集群的槽位配置信息并将其缓存在客户端本地.</span><br><span class="line"><span class="number">3</span>.这样当客户端要查找某个key时,可以直接定位到目标节点.同时因为槽位的信息可能会存在客户端与服务器不一致的情况,还需要纠正机制来实现槽位信息的校验调整.</span><br></pre></td></tr></table></figure>
+<p><strong>槽位定位算法</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cluster默认会对key值使用<span class="string">'crc16'</span>算法进行hash得到一个整数值，然后用这个整数值对<span class="number">16384</span>进行取模来得到具体槽位.</span><br><span class="line">HASH_SLOT = CRC16(key) mod <span class="number">16384</span></span><br></pre></td></tr></table></figure>
+<p><strong>跳转重定位</strong> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.当客户端向一个错误的节点发出了指令,该节点会发现指令的key所在的槽位并不归自己管理,这时它会向客户端发送一个特殊的跳转指令携带目标操作的节点地址,告诉客户端去连这个节点去获取数据。</span><br><span class="line"><span class="number">2</span>.客户端收到指令后除了跳转到正确的节点上去操作,还会同步更新纠正本地的槽位映射表缓存，后续所有key将使用新的槽位映射表。</span><br></pre></td></tr></table></figure>
+<p><strong>Redis集群节点间的通信机制</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis cluster节点间采取gossip协议进行通信</span><br></pre></td></tr></table></figure>
+<p><strong>网络抖动</strong> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 问题：</span></span><br><span class="line">  现实情况下网络可能发生抖动,突然之间部分连接不可访问,然后很快又恢复正常.这种网络抖动可能导致主从频繁切换,从		而导致数据的重新复制.</span><br><span class="line"><span class="comment">// 解决：</span></span><br><span class="line">  Redis Cluster 提供了一种选项cluster-node-timeout,表示当某个节点持续timeout的时间失联时，才认定该节点故障，需要进行主从切换.</span><br></pre></td></tr></table></figure>
+<p><strong>Redis集群选举原理</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 简述</span></span><br><span class="line">当slave发现自己的master变为FAIL状态时,便尝试进行Failover(故障转移),期望成为新的matser.由于挂掉的master可能存在多个slave,所以存在多个slave竞争成为matser节点的过程.</span><br><span class="line"><span class="comment">// 大致流程</span></span><br><span class="line"><span class="number">1</span>.slave发现自己的master变为FAIL状态</span><br><span class="line"><span class="number">2</span>.将自己记录的集群currentEpoch加<span class="number">1</span>,并广播FAILOVER_AUTH_REQUEST 信息</span><br><span class="line"><span class="number">3</span>.其他节点收到该信息,只有master响应,判断请求者的合法性,并发送送FAILOVER_AUTH_ACK，对每一个epoch只发送一次ack.</span><br><span class="line"><span class="number">4</span>.尝试failover的slave收集master返回的FAILOVER_AUTH_ACK</span><br><span class="line"><span class="number">5</span>.slave收到超过半数matser的Ack后就变成新的master -- <span class="string">'所以集群的节点需要至少3个,如果只有两个,一个挂了就不能选举成功'</span></span><br><span class="line"><span class="number">6</span>.slave广播Pong消息通知其他集群节点，它是新的matser了.</span><br><span class="line"><span class="comment">// 补充说明</span></span><br><span class="line">从节点并不是在主节点一进入FAIL状态就马上尝试发起选举,而是有一定的延迟,一定的延迟确保我们等待FAIl状态在集群中传播,slave如果立即尝试选举,其他的matser可能还没有意识到FAIL状态，可能会拒绝投票.</span><br><span class="line">延迟计算公式：</span><br><span class="line">DELAY = <span class="number">500</span>ms + random(<span class="number">0</span> ~ <span class="number">500</span>ms) + SLAVE_RANK * <span class="number">1000</span>ms</span><br><span class="line"><span class="comment">// SLAVE_RANK说明</span></span><br><span class="line">SLAVE_RANK表示slave已经从matser复制数据的总量的排名.RANk越小代表已复制的数据越新,理论上持有最新数据的slave会最先发起选举.</span><br></pre></td></tr></table></figure>
+<p><strong>推荐节点数为奇数</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">奇数个master节点可以在满足选举该条件的基础上节省一个节点.</span><br><span class="line">例如：<span class="number">3</span>个节点和<span class="number">4</span>个节点</span><br><span class="line">挂了<span class="number">1</span>个节点，都能选举新节点.</span><br><span class="line">挂了两个<span class="number">2</span>个，就都没法选举了.</span><br><span class="line">所以奇数的master节点更多的是从<span class="string">'节省机器资源角度出发说的</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/24/Redis之主从架构/" rel="next" title="Redis之主从架构">
+                <i class="fa fa-chevron-left"></i> Redis之主从架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/12/Redis之性能优化/" rel="prev" title="Redis之性能优化">
+                Redis之性能优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar2.gif"
+                alt="Youga" />
+            
+              <p class="site-author-name" itemprop="name">Youga</p>
+              <p class="site-description motion-element" itemprop="description">随心所欲 前往任何地方</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/geyou1995" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:18368093769@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis哨兵高可用架构"><span class="nav-number">1.</span> <span class="nav-text">Redis哨兵高可用架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis高可用集群架构"><span class="nav-number">2.</span> <span class="nav-text">Redis高可用集群架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始搭建"><span class="nav-number">2.1.</span> <span class="nav-text">开始搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis集群原理分析"><span class="nav-number">2.2.</span> <span class="nav-text">Redis集群原理分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+      
+
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=37092549&auto=1&height=66"></iframe>
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Youga</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("GmnS7GtoaJewVuvA4YQDO0HT-gzGzoHsz", "bcgU23t2QLjY2jnbcJtu4N6n");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
